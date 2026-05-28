@@ -19,34 +19,45 @@
   }
   h1 { font-size: 1.4rem; color: var(--accent); letter-spacing: 2px; text-align: center; }
   .subtitle { font-size: 0.75rem; color: var(--muted); text-align: center; }
-  .mode-bar { display: flex; gap: 8px; background: var(--panel); border-radius: 50px; padding: 4px; }
+  .mode-bar {
+    display: flex; gap: 8px; background: var(--panel);
+    border-radius: 50px; padding: 4px;
+  }
   .mode-btn {
     padding: 8px 22px; border: none; border-radius: 50px; cursor: pointer;
-    font-size: 0.85rem; font-weight: 600; background: transparent; color: var(--muted); transition: all .2s;
+    font-size: 0.85rem; font-weight: 600; background: transparent;
+    color: var(--muted); transition: all .2s;
   }
   .mode-btn.active { background: var(--accent2); color: #fff; }
   .freq-bar { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
   .freq-btn {
     padding: 6px 14px; border: 1.5px solid var(--muted); border-radius: 50px;
-    background: transparent; color: var(--muted); font-size: 0.75rem; cursor: pointer; transition: all .2s;
+    background: transparent; color: var(--muted); font-size: 0.75rem;
+    cursor: pointer; transition: all .2s;
   }
   .freq-btn.active { border-color: var(--accent); color: var(--accent); background: #00e5ff18; }
   .status-row { display: flex; align-items: center; gap: 10px; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); transition: background .3s; }
-  .dot.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--muted); transition: background .3s;
+  }
+  .dot.on  { background: var(--green); box-shadow: 0 0 8px var(--green); }
   .dot.err { background: var(--red); }
   #statusText { font-size: 0.8rem; color: var(--muted); }
 
-  /* PHONE */
-  #phoneMode { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
+  /* ── PHONE ── */
+  #phoneMode {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 16px; width: 100%;
+  }
   .joystick-wrap {
     position: relative; width: min(320px, 90vw); height: min(320px, 90vw);
-    background: var(--panel); border-radius: 50%; border: 2px solid var(--muted);
-    touch-action: none; user-select: none;
+    background: var(--panel); border-radius: 50%;
+    border: 2px solid var(--muted); touch-action: none; user-select: none;
   }
   .zone-grid {
     position: absolute; inset: 0; display: grid;
-    grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
     border-radius: 50%; overflow: hidden; pointer-events: none;
   }
   .zone-cell {
@@ -58,8 +69,8 @@
     position: absolute; width: 70px; height: 70px; border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, var(--accent2), #3a1a8a);
     border: 3px solid var(--accent); box-shadow: 0 0 20px var(--accent2);
-    transform: translate(-50%, -50%); left: 50%; top: 50%; pointer-events: none;
-    transition: box-shadow .1s;
+    transform: translate(-50%,-50%); left: 50%; top: 50%;
+    pointer-events: none; transition: box-shadow .1s;
   }
   .joystick-thumb.pressed { box-shadow: 0 0 35px var(--accent); }
   .pos-label {
@@ -75,32 +86,38 @@
   }
   .tx-btn:hover { transform: scale(1.04); }
   .tx-btn.active { background: linear-gradient(135deg, var(--red), #880000); }
-  .vol-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--muted); }
+  .vol-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--muted);
+  }
   .vol-row input[type=range] { width: 120px; accent-color: var(--accent); }
 
-  /* LAPTOP */
-  #laptopMode { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
+  /* ── LAPTOP ── */
+  #laptopMode {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 16px; width: 100%;
+  }
   .laptop-joystick {
     position: relative; width: min(360px, 90vw); height: min(360px, 90vw);
     background: var(--panel); border-radius: 50%; border: 2px solid var(--muted);
   }
   .laptop-zone-grid {
     position: absolute; inset: 0; display: grid;
-    grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
     border-radius: 50%; overflow: hidden; pointer-events: none;
   }
   .laptop-zone-cell {
     border: 1px solid #ffffff08; display: flex; align-items: center;
     justify-content: center; font-size: 0.75rem; color: #ffffff15;
-    font-weight: 700; transition: all .2s;
+    font-weight: 700; transition: all .15s;
   }
   .laptop-zone-cell.lit { background: #00e5ff22; color: var(--accent); font-size: 1rem; }
   .laptop-thumb {
     position: absolute; width: 80px; height: 80px; border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, var(--green), #006633);
     border: 3px solid var(--green); box-shadow: 0 0 20px var(--green);
-    transform: translate(-50%, -50%); left: 50%; top: 50%;
-    pointer-events: none; transition: left .05s, top .05s;
+    transform: translate(-50%,-50%); left: 50%; top: 50%;
+    pointer-events: none; transition: left .04s linear, top .04s linear;
   }
   .laptop-thumb.active { box-shadow: 0 0 40px var(--green); }
   .rx-label {
@@ -116,18 +133,31 @@
   .rx-btn {
     padding: 14px 40px;
     background: linear-gradient(135deg, #006633, #003318);
-    border: 2px solid var(--green); border-radius: 50px;
-    color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer;
-    letter-spacing: 1px; box-shadow: 0 4px 20px #00e67655; transition: all .2s;
+    border: 2px solid var(--green); border-radius: 50px; color: #fff;
+    font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: 1px;
+    box-shadow: 0 4px 20px #00e67655; transition: all .2s;
   }
-  .rx-btn.active { background: linear-gradient(135deg, var(--red), #880000); border-color: var(--red); }
-  .conf-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--muted); }
-  .conf-bar { width: 150px; height: 8px; background: #222; border-radius: 4px; overflow: hidden; }
-  .conf-fill { height: 100%; background: var(--green); width: 0%; transition: width .05s; border-radius: 4px; }
+  .rx-btn.active {
+    background: linear-gradient(135deg, var(--red), #880000);
+    border-color: var(--red);
+  }
+  .conf-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--muted);
+  }
+  .conf-bar {
+    width: 150px; height: 8px; background: #222;
+    border-radius: 4px; overflow: hidden;
+  }
+  .conf-fill {
+    height: 100%; background: var(--green); width: 0%;
+    transition: width .04s; border-radius: 4px;
+  }
   .hidden { display: none !important; }
   .info-box {
-    background: var(--panel); border-radius: var(--radius); padding: 12px 16px;
-    font-size: 0.75rem; color: var(--muted); max-width: 500px; line-height: 1.6;
+    background: var(--panel); border-radius: var(--radius);
+    padding: 12px 16px; font-size: 0.75rem; color: var(--muted);
+    max-width: 500px; line-height: 1.6;
   }
   .info-box b { color: var(--accent); }
 </style>
@@ -135,18 +165,18 @@
 <body>
 
 <h1>🎮 SONIC JOYSTICK</h1>
-<p class="subtitle">Acoustic joystick — phone transmits, laptop receives</p>
+<p class="subtitle">Acoustic joystick — phone transmits · laptop receives</p>
 
+<!-- MODE -->
 <div class="mode-bar">
-  <button class="mode-btn active" id="btnPhone" onclick="setMode('phone')">📱 Phone (TX)</button>
-  <button class="mode-btn" id="btnLaptop" onclick="setMode('laptop')">💻 Laptop (RX)</button>
+  <button class="mode-btn active" id="btnPhone"  onclick="setMode('phone')">📱 Phone (TX)</button>
+  <button class="mode-btn"        id="btnLaptop" onclick="setMode('laptop')">💻 Laptop (RX)</button>
 </div>
 
+<!-- BANDS: only Low and 100-200Hz -->
 <div class="freq-bar">
-  <button class="freq-btn" id="fUltra" onclick="setFreqBand('ultrasonic')">🔇 Ultrasonic (18–20kHz)</button>
-  <button class="freq-btn active" id="fMid" onclick="setFreqBand('mid')">🔊 Mid (2–4kHz)</button>
-  <button class="freq-btn" id="fLow" onclick="setFreqBand('low')">🔊 Low (400–800Hz)</button>
-  <button class="freq-btn" id="fSub" onclick="setFreqBand('sub')">🔉 Sub (30–40Hz)</button>
+  <button class="freq-btn active" id="fLow"  onclick="setFreqBand('low')">🔊 Low (400–800 Hz)</button>
+  <button class="freq-btn"        id="fBass" onclick="setFreqBand('bass')">🔉 Bass (100–200 Hz)</button>
 </div>
 
 <div class="status-row">
@@ -154,7 +184,7 @@
   <span id="statusText">Idle</span>
 </div>
 
-<!-- PHONE MODE -->
+<!-- ══════════════ PHONE MODE ══════════════ -->
 <div id="phoneMode">
   <div class="pos-label" id="phonePos">CENTER</div>
   <div class="joystick-wrap" id="joystickWrap">
@@ -163,57 +193,59 @@
   </div>
   <div class="vol-row">
     🔈 Volume:
-    <input type="range" id="txVolume" min="0.1" max="1.0" step="0.05" value="0.7" />
-    <span id="txVolLabel">70%</span>
+    <input type="range" id="txVolume" min="0.1" max="1.0" step="0.05" value="0.8" />
+    <span id="txVolLabel">80%</span>
   </div>
   <button class="tx-btn" id="txBtn" onclick="toggleTransmit()">▶ Start Transmitting</button>
   <div class="info-box">
-    <b>How to use (Phone):</b><br>
-    1. Select a frequency band above.<br>
-    2. Tap <b>Start Transmitting</b>.<br>
-    3. Drag the joystick — position is encoded as audio tones.<br>
-    4. Keep phone speaker aimed at laptop microphone.<br>
-    <b>Tip:</b> Mid band works best in most rooms. Ultrasonic is silent to humans.
+    <b>Phone tips:</b><br>
+    • Select the same band on both devices.<br>
+    • Tap <b>Start Transmitting</b> then drag the joystick.<br>
+    • Point the phone speaker toward the laptop mic.<br>
+    • <b>Low (400–800 Hz)</b> is the most reliable band.
   </div>
 </div>
 
-<!-- LAPTOP MODE -->
+<!-- ══════════════ LAPTOP MODE ══════════════ -->
 <div id="laptopMode" class="hidden">
   <div class="rx-label" id="laptopPos">---</div>
   <div class="laptop-joystick" id="laptopJoystick">
     <div class="laptop-zone-grid" id="laptopZoneGrid"></div>
-    <div class="laptop-thumb" id="laptopThumb"></div>
+    <div class="laptop-thumb"    id="laptopThumb"></div>
   </div>
   <div class="conf-row">
-    Signal confidence:
+    Confidence:
     <div class="conf-bar"><div class="conf-fill" id="confFill"></div></div>
     <span id="confPct">0%</span>
   </div>
   <div class="spectrum-wrap">
-    <h3>Live Spectrum (listening for tones)</h3>
+    <h3>Live spectrum</h3>
     <canvas id="specCanvas" width="500" height="80"></canvas>
   </div>
   <button class="rx-btn" id="rxBtn" onclick="toggleListen()">🎤 Start Listening</button>
   <div class="info-box">
-    <b>How to use (Laptop):</b><br>
-    1. Match the frequency band selected on the phone.<br>
-    2. Click <b>Start Listening</b> and allow microphone access.<br>
-    3. The joystick mirrors the phone position in real-time.<br>
-    <b>Tip:</b> Keep background noise low. The spectrum shows detected tones.
+    <b>Laptop tips:</b><br>
+    • Match the band chosen on the phone.<br>
+    • Click <b>Start Listening</b> and allow mic access.<br>
+    • Reduce background noise for best results.<br>
+    • The spectrum shows which tones are being detected.
   </div>
 </div>
 
 <script>
-// ============================================================
-//  SONIC JOYSTICK — Ultra-Low Latency Version
-//  AudioWorklet-based decoding + time-domain energy detection
-// ============================================================
+// ═══════════════════════════════════════════════════════════════
+//  SONIC JOYSTICK  —  Ultra-low-latency edition
+//  TX: Web Audio OscillatorNode  (latencyHint:'interactive')
+//  RX: AudioWorklet + Goertzel   (no FFT, no majority vote)
+//      Confidence gate replaces vote window → single-block react
+// ═══════════════════════════════════════════════════════════════
 
+// ── positions ──────────────────────────────────────────────────
 const POSITIONS = ['NW','N','NE','W','CENTER','E','SW','S','SE'];
 const POS_LABELS = {
-  NW:'↖ NW', N:'↑ N', NE:'↗ NE',
-  W:'← W', CENTER:'● CENTER', E:'→ E',
-  SW:'↙ SW', S:'↓ S', SE:'↘ SE'
+  NW:'↖ NW', N:'↑ N',  NE:'↗ NE',
+  W:'← W',  CENTER:'● CENTER', E:'→ E',
+  SW:'↙ SW', S:'↓ S',  SE:'↘ SE'
 };
 const GRID_MAP = [
   ['NW','N','NE'],
@@ -221,87 +253,99 @@ const GRID_MAP = [
   ['SW','S','SE']
 ];
 
-// ---- FREQUENCY BANDS (High band removed, Sub updated to 30-40Hz) ----
+// ── bands (only Low + Bass) ────────────────────────────────────
+// Tones are spaced to be easily resolved by Goertzel at the
+// chosen block sizes. Sync beacon sits one step below tones[0].
 const BANDS = {
-  ultrasonic: {
-    label: 'Ultrasonic (18–20kHz)',
-    tones: [18000,18200,18400,18600,18800,19000,19200,19400,19600],
-    bw: 80
-  },
-  mid: {
-    label: 'Mid (2–4kHz)',
-    tones: [2000,2200,2400,2600,2800,3000,3200,3400,3600],
-    bw: 70
-  },
   low: {
-    label: 'Low (400–800Hz)',
-    tones: [400,450,500,550,600,650,700,750,800],
-    bw: 18
+    label:     'Low (400–800 Hz)',
+    // 9 tones, ~44 Hz apart — wide enough for clean separation
+    tones:     [400, 444, 489, 533, 578, 622, 667, 711, 756],
+    syncFreq:  356,   // ~44 Hz below tones[0]
+    bw:        18,    // ± Hz for Goertzel window
+    blockSize: 256,   // ~5.8 ms @ 44100 Hz  ← very fast
+    noiseFloor:0.0008
   },
-  sub: {
-    label: 'Sub (30–40Hz)',
-    tones: [30,31.25,32.5,33.75,35,36.25,37.5,38.75,40],
-    bw: 0.5
+  bass: {
+    label:     'Bass (100–200 Hz)',
+    // 9 tones, ~12.5 Hz apart
+    tones:     [100, 112, 125, 137, 150, 162, 175, 187, 200],
+    syncFreq:  88,    // ~12 Hz below tones[0]
+    bw:        5,
+    blockSize: 1024,  // ~23 ms @ 44100 Hz — needed for 5 Hz resolution
+    noiseFloor:0.0004
   }
 };
 
-// ---- AUDIOWORKLET PROCESSOR (inlined as Blob URL) ----
-// Runs entirely off the main thread for zero-jank decoding
-const WORKLET_CODE = `
+// ── AudioWorklet source (inlined as Blob) ──────────────────────
+// Goertzel runs entirely in the audio-render thread.
+// No FFT, no smoothing, no vote window — single block decision.
+const WORKLET_SRC = `
 class GoertzelProcessor extends AudioWorkletProcessor {
-  constructor(options) {
+  constructor(opt) {
     super();
-    this._sampleRate = options.processorOptions.sampleRate;
-    this._freqs = options.processorOptions.freqs;
-    this._syncFreq = options.processorOptions.syncFreq;
-    this._bw = options.processorOptions.bw;
-    this._blockSize = options.processorOptions.blockSize;
-    this._buf = [];
-    this._noiseFloor = options.processorOptions.noiseFloor;
+    const p        = opt.processorOptions;
+    this.sr        = p.sampleRate;
+    this.freqs     = p.freqs;          // 9 data tones
+    this.syncFreq  = p.syncFreq;       // beacon tone
+    this.blockSize = p.blockSize;
+    this.floor     = p.noiseFloor;
+    this.buf       = [];
+
+    // Pre-compute Goertzel coefficients (constant per session)
+    this.coeffs     = this.freqs.map(f => this._coeff(f));
+    this.syncCoeff  = this._coeff(this.syncFreq);
   }
 
-  // Goertzel algorithm — O(N) per frequency, far faster than full FFT
-  goertzel(samples, targetFreq) {
-    const N = samples.length;
-    const k = Math.round(N * targetFreq / this._sampleRate);
-    const omega = (2 * Math.PI * k) / N;
-    const coeff = 2 * Math.cos(omega);
-    let s0 = 0, s1 = 0, s2 = 0;
-    for (let i = 0; i < N; i++) {
-      s0 = samples[i] + coeff * s1 - s2;
+  _coeff(freq) {
+    // k doesn't have to be integer — use exact frequency
+    const w = 2 * Math.PI * freq / this.sr;
+    return 2 * Math.cos(w);
+  }
+
+  _goertzel(samples, coeff) {
+    let s1 = 0, s2 = 0;
+    for (let i = 0; i < samples.length; i++) {
+      const s0 = samples[i] + coeff * s1 - s2;
       s2 = s1; s1 = s0;
     }
-    // Power = s1^2 + s2^2 - s1*s2*coeff
     return s1 * s1 + s2 * s2 - s1 * s2 * coeff;
   }
 
   process(inputs) {
-    const input = inputs[0];
-    if (!input || !input[0]) return true;
-    const channel = input[0];
-    for (let i = 0; i < channel.length; i++) this._buf.push(channel[i]);
+    const ch = inputs[0]?.[0];
+    if (!ch) return true;
 
-    while (this._buf.length >= this._blockSize) {
-      const block = this._buf.splice(0, this._blockSize);
+    // Accumulate samples
+    for (let i = 0; i < ch.length; i++) this.buf.push(ch[i]);
 
-      // Check sync tone power
-      const syncPower = this.goertzel(block, this._syncFreq);
-      if (syncPower < this._noiseFloor) {
-        this.port.postMessage({ pos: null, confidence: 0 });
+    // Process every full block immediately — no waiting
+    while (this.buf.length >= this.blockSize) {
+      const block = this.buf.splice(0, this.blockSize);
+
+      const syncPow = this._goertzel(block, this.syncCoeff);
+
+      if (syncPow < this.floor) {
+        // No signal present
+        this.port.postMessage({ pos: null, conf: 0, syncPow });
         continue;
       }
 
-      // Find loudest data tone
-      let bestIdx = 0, bestPower = -Infinity;
-      for (let i = 0; i < this._freqs.length; i++) {
-        const p = this.goertzel(block, this._freqs[i]);
-        if (p > bestPower) { bestPower = p; bestIdx = i; }
+      // Score every data tone
+      let bestIdx = 0, bestPow = -1;
+      const powers = new Float32Array(this.freqs.length);
+      for (let i = 0; i < this.freqs.length; i++) {
+        powers[i] = this._goertzel(block, this.coeffs[i]);
+        if (powers[i] > bestPow) { bestPow = powers[i]; bestIdx = i; }
       }
 
-      const confidence = Math.min(100, Math.round(
-        (Math.log10(bestPower + 1) / Math.log10(syncPower + 1)) * 100
-      ));
-      this.port.postMessage({ pos: bestIdx, confidence });
+      // Confidence: ratio of winner to sync beacon (0–100)
+      const conf = Math.min(100, Math.round((bestPow / (syncPow + 1e-9)) * 80));
+
+      // Only emit if confidence is meaningful (≥15) to suppress noise spikes
+      if (conf >= 15) {
+        this.port.postMessage({ pos: bestIdx, conf, syncPow });
+      }
     }
     return true;
   }
@@ -309,69 +353,53 @@ class GoertzelProcessor extends AudioWorkletProcessor {
 registerProcessor('goertzel-processor', GoertzelProcessor);
 `;
 
-// ---- STATE ----
-let currentMode = 'phone';
-let currentBand = 'mid';
+// ── state ──────────────────────────────────────────────────────
+let currentMode  = 'phone';
+let currentBand  = 'low';
 let transmitting = false;
-let listening = false;
-let joystickPos = 'CENTER';
-let txAudioCtx = null;
-let txOscillators = [];
-let txGain = null;
-let rxAudioCtx = null;
-let rxAnalyser = null;
-let rxWorkletNode = null;
-let rxStream = null;
-let specAnimFrame = null;
-let txVolume = 0.7;
-let lastRxPos = 'CENTER';
+let listening    = false;
+let joystickPos  = 'CENTER';
+let lastRxPos    = null;
 
-// Lightweight 3-frame majority vote (minimal latency, still noise-robust)
-const VOTE_WINDOW = 3;
-let voteBuffer = [];
+let txCtx        = null;
+let txOscs       = [];
+let txGain       = null;
+let txVolume     = 0.8;
 
-// ---- GRID BUILDERS ----
-function buildPhoneGrid() {
-  const grid = document.getElementById('phoneZoneGrid');
-  grid.innerHTML = '';
+let rxCtx        = null;
+let rxWorklet    = null;
+let rxAnalyser   = null;
+let rxStream     = null;
+let specRaf      = null;
+
+// ── grid builders ──────────────────────────────────────────────
+function buildGrid(containerId, prefix, cls) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
   GRID_MAP.forEach(row => row.forEach(pos => {
-    const cell = document.createElement('div');
-    cell.className = 'zone-cell';
-    cell.id = 'pz_' + pos;
-    cell.textContent = pos === 'CENTER' ? '●' : pos;
-    grid.appendChild(cell);
+    const c = document.createElement('div');
+    c.className = cls;
+    c.id = prefix + pos;
+    c.textContent = pos === 'CENTER' ? '●' : pos;
+    el.appendChild(c);
   }));
 }
 
-function buildLaptopGrid() {
-  const grid = document.getElementById('laptopZoneGrid');
-  grid.innerHTML = '';
-  GRID_MAP.forEach(row => row.forEach(pos => {
-    const cell = document.createElement('div');
-    cell.className = 'laptop-zone-cell';
-    cell.id = 'lz_' + pos;
-    cell.textContent = pos === 'CENTER' ? '●' : pos;
-    grid.appendChild(cell);
-  }));
-}
-
-// ---- MODE / BAND ----
+// ── mode / band ────────────────────────────────────────────────
 function setMode(mode) {
   currentMode = mode;
-  stopTransmit();
-  stopListen();
-  document.getElementById('phoneMode').classList.toggle('hidden', mode !== 'phone');
+  stopTransmit(); stopListen();
+  document.getElementById('phoneMode') .classList.toggle('hidden', mode !== 'phone');
   document.getElementById('laptopMode').classList.toggle('hidden', mode !== 'laptop');
-  document.getElementById('btnPhone').classList.toggle('active', mode === 'phone');
-  document.getElementById('btnLaptop').classList.toggle('active', mode === 'laptop');
+  document.getElementById('btnPhone')  .classList.toggle('active', mode === 'phone');
+  document.getElementById('btnLaptop') .classList.toggle('active', mode === 'laptop');
   setStatus('idle');
 }
 
 function setFreqBand(band) {
   currentBand = band;
   document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
-  const ids = { ultrasonic:'fUltra', mid:'fMid', low:'fLow', sub:'fSub' };
-  document.getElementById(ids[band]).classList.add('active');
+  document.getElementById(band === 'low' ? 'fLow' : 'fBass').classList.add('active');
   if (transmitting) { stopTransmit(); startTransmit(); }
   if (listening)    { stopListen();   startListen();   }
 }
@@ -380,54 +408,49 @@ function setStatus(state, msg) {
   const dot = document.getElementById('statusDot');
   const txt = document.getElementById('statusText');
   dot.className = 'dot';
-  if (state === 'on')  { dot.classList.add('on');  txt.textContent = msg || 'Active'; }
-  else if (state === 'err') { dot.classList.add('err'); txt.textContent = msg || 'Error'; }
-  else { txt.textContent = msg || 'Idle'; }
+  if      (state === 'on')  { dot.classList.add('on');  txt.textContent = msg || 'Active'; }
+  else if (state === 'err') { dot.classList.add('err'); txt.textContent = msg || 'Error';  }
+  else                      {                            txt.textContent = msg || 'Idle';   }
 }
 
-// ============================================================
+// ═══════════════════════════════════════════════════════════════
 //  PHONE TX
-// ============================================================
+// ═══════════════════════════════════════════════════════════════
 function initJoystick() {
   const wrap  = document.getElementById('joystickWrap');
   const thumb = document.getElementById('joystickThumb');
-  let active = false;
+  let active  = false;
 
-  function getZone(clientX, clientY) {
+  function zone(clientX, clientY) {
     const rect = wrap.getBoundingClientRect();
-    const cx = rect.left + rect.width  / 2;
-    const cy = rect.top  + rect.height / 2;
-    const dx = clientX - cx;
-    const dy = clientY - cy;
-    const r  = rect.width / 2;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const clampedDist = Math.min(dist, r * 0.85);
-    const angle = Math.atan2(dy, dx);
-    thumb.style.left = (cx - rect.left + Math.cos(angle) * clampedDist) + 'px';
-    thumb.style.top  = (cy - rect.top  + Math.sin(angle) * clampedDist) + 'px';
+    const cx   = rect.left + rect.width  / 2;
+    const cy   = rect.top  + rect.height / 2;
+    const dx   = clientX - cx;
+    const dy   = clientY - cy;
+    const r    = rect.width / 2;
+    const dist = Math.hypot(dx, dy);
+    const cDist = Math.min(dist, r * 0.85);
+    const ang  = Math.atan2(dy, dx);
+    thumb.style.left = (cx - rect.left + Math.cos(ang) * cDist) + 'px';
+    thumb.style.top  = (cy - rect.top  + Math.sin(ang) * cDist) + 'px';
     const nx = dx / r, ny = dy / r;
-    const col = nx < -0.33 ? 0 : nx > 0.33 ? 2 : 1;
-    const row = ny < -0.33 ? 0 : ny > 0.33 ? 2 : 1;
-    return GRID_MAP[row][col];
+    return GRID_MAP[ny < -0.33 ? 0 : ny > 0.33 ? 2 : 1]
+                   [nx < -0.33 ? 0 : nx > 0.33 ? 2 : 1];
   }
 
-  function onStart(e) {
-    e.preventDefault(); active = true;
-    thumb.classList.add('pressed');
-    const pt = e.touches ? e.touches[0] : e;
-    updateJoystickPos(getZone(pt.clientX, pt.clientY));
-  }
-  function onMove(e) {
+  const onStart = e => {
+    e.preventDefault(); active = true; thumb.classList.add('pressed');
+    const t = e.touches?.[0] ?? e; applyZone(zone(t.clientX, t.clientY));
+  };
+  const onMove = e => {
     e.preventDefault(); if (!active) return;
-    const pt = e.touches ? e.touches[0] : e;
-    updateJoystickPos(getZone(pt.clientX, pt.clientY));
-  }
-  function onEnd(e) {
-    e.preventDefault(); active = false;
-    thumb.classList.remove('pressed');
+    const t = e.touches?.[0] ?? e; applyZone(zone(t.clientX, t.clientY));
+  };
+  const onEnd = e => {
+    e.preventDefault(); active = false; thumb.classList.remove('pressed');
     thumb.style.left = '50%'; thumb.style.top = '50%';
-    updateJoystickPos('CENTER');
-  }
+    applyZone('CENTER');
+  };
 
   wrap.addEventListener('touchstart', onStart, {passive:false});
   wrap.addEventListener('touchmove',  onMove,  {passive:false});
@@ -438,281 +461,238 @@ function initJoystick() {
   wrap.addEventListener('mouseleave', onEnd);
 }
 
-function updateJoystickPos(pos) {
+function applyZone(pos) {
   if (pos === joystickPos) return;
   joystickPos = pos;
-  document.getElementById('phonePos').textContent = POS_LABELS[pos] || pos;
+  document.getElementById('phonePos').textContent = POS_LABELS[pos];
   POSITIONS.forEach(p => {
-    const el = document.getElementById('pz_' + p);
-    if (el) el.classList.toggle('active-zone', p === pos);
+    document.getElementById('pz_' + p)?.classList.toggle('active-zone', p === pos);
   });
-  if (transmitting) playTone(pos);
+  if (transmitting) playTones(pos);
 }
 
+// ── TX audio ───────────────────────────────────────────────────
 function startTransmit() {
-  if (txAudioCtx) txAudioCtx.close();
-  // latencyHint: 'interactive' = lowest possible output latency
-  txAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
-  txGain = txAudioCtx.createGain();
+  if (txCtx) txCtx.close();
+  txCtx  = new AudioContext({ latencyHint: 'interactive', sampleRate: 44100 });
+  txGain = txCtx.createGain();
   txGain.gain.value = txVolume;
-  txGain.connect(txAudioCtx.destination);
+  txGain.connect(txCtx.destination);
   transmitting = true;
-  playTone(joystickPos);
+  playTones(joystickPos);
   document.getElementById('txBtn').textContent = '⏹ Stop Transmitting';
   document.getElementById('txBtn').classList.add('active');
-  setStatus('on', 'Transmitting · ' + BANDS[currentBand].label);
+  setStatus('on', 'TX · ' + BANDS[currentBand].label);
 }
 
 function stopTransmit() {
   transmitting = false;
-  clearOscillators();
-  if (txAudioCtx) { txAudioCtx.close(); txAudioCtx = null; }
+  killOscs();
+  if (txCtx) { txCtx.close(); txCtx = null; }
   document.getElementById('txBtn').textContent = '▶ Start Transmitting';
   document.getElementById('txBtn').classList.remove('active');
   if (currentMode === 'phone') setStatus('idle');
 }
 
-function toggleTransmit() {
-  if (transmitting) stopTransmit(); else startTransmit();
+function toggleTransmit() { transmitting ? stopTransmit() : startTransmit(); }
+
+function killOscs() {
+  txOscs.forEach(o => { try { o.stop(); o.disconnect(); } catch(_){} });
+  txOscs = [];
 }
 
-function clearOscillators() {
-  txOscillators.forEach(o => { try { o.stop(); o.disconnect(); } catch(e){} });
-  txOscillators = [];
-}
-
-function playTone(pos) {
-  if (!transmitting || !txAudioCtx) return;
-  clearOscillators();
+function playTones(pos) {
+  if (!transmitting || !txCtx) return;
+  killOscs();
   const band = BANDS[currentBand];
   const idx  = POSITIONS.indexOf(pos);
   if (idx < 0) return;
 
-  // Sync beacon: fixed tone just below the band
-  const syncFreq = band.tones[0] - band.bw * 4;
-  const dataFreq = band.tones[idx];
-
-  [syncFreq, dataFreq].forEach(freq => {
-    if (freq <= 0) return;
-    const osc = txAudioCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, txAudioCtx.currentTime);
-    const g = txAudioCtx.createGain();
-    // 8ms ramp — fast enough to feel instant, avoids clicks
-    g.gain.setValueAtTime(0, txAudioCtx.currentTime);
-    g.gain.linearRampToValueAtTime(0.5, txAudioCtx.currentTime + 0.008);
+  const now = txCtx.currentTime;
+  // Transmit sync beacon + data tone simultaneously
+  [band.syncFreq, band.tones[idx]].forEach(freq => {
+    const osc = txCtx.createOscillator();
+    const g   = txCtx.createGain();
+    osc.type  = 'sine';
+    osc.frequency.value = freq;
+    // 4 ms attack — imperceptible delay, eliminates click artifacts
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.5, now + 0.004);
     osc.connect(g).connect(txGain);
-    osc.start();
-    txOscillators.push(osc);
+    osc.start(now);
+    txOscs.push(osc);
   });
 }
 
-document.getElementById('txVolume').addEventListener('input', function() {
+document.getElementById('txVolume').addEventListener('input', function () {
   txVolume = parseFloat(this.value);
   document.getElementById('txVolLabel').textContent = Math.round(txVolume * 100) + '%';
   if (txGain) txGain.gain.value = txVolume;
 });
 
-// ============================================================
-//  LAPTOP RX — AudioWorklet + Goertzel
-// ============================================================
-
-// Determine optimal block size per band
-// Sub needs larger blocks for frequency resolution at low Hz
-function getBlockSize(band) {
-  const sizes = { ultrasonic: 512, mid: 512, low: 1024, sub: 4096 };
-  return sizes[band] || 512;
-}
-
-// Noise floor threshold per band (Goertzel power units)
-function getNoiseFloor(band) {
-  const floors = { ultrasonic: 0.001, mid: 0.001, low: 0.002, sub: 0.0005 };
-  return floors[band] || 0.001;
-}
-
+// ═══════════════════════════════════════════════════════════════
+//  LAPTOP RX  —  AudioWorklet + Goertzel, no vote window
+// ═══════════════════════════════════════════════════════════════
 async function startListen() {
   try {
     rxStream = await navigator.mediaDevices.getUserMedia({
       audio: {
         echoCancellation: false,
         noiseSuppression: false,
-        autoGainControl: false,
-        // Request lowest possible input latency
-        latency: 0
+        autoGainControl:  false,
+        channelCount:     1
       }
     });
 
-    // latencyHint: 'interactive' for minimum input latency
-    rxAudioCtx = new (window.AudioContext || window.webkitAudioContext)({
-      latencyHint: 'interactive'
-    });
+    rxCtx = new AudioContext({ latencyHint: 'interactive', sampleRate: 44100 });
 
-    const band      = BANDS[currentBand];
-    const syncFreq  = band.tones[0] - band.bw * 4;
-    const blockSize = getBlockSize(currentBand);
-    const noiseFloor = getNoiseFloor(currentBand);
+    const band = BANDS[currentBand];
 
-    // Create worklet blob URL
-    const blob = new Blob([WORKLET_CODE], { type: 'application/javascript' });
-    const workletUrl = URL.createObjectURL(blob);
-    await rxAudioCtx.audioWorklet.addModule(workletUrl);
-    URL.revokeObjectURL(workletUrl);
+    // Inject worklet from blob URL
+    const blob = new Blob([WORKLET_SRC], { type: 'application/javascript' });
+    const url  = URL.createObjectURL(blob);
+    await rxCtx.audioWorklet.addModule(url);
+    URL.revokeObjectURL(url);
 
-    const source = rxAudioCtx.createMediaStreamSource(rxStream);
+    const src = rxCtx.createMediaStreamSource(rxStream);
 
-    rxWorkletNode = new AudioWorkletNode(rxAudioCtx, 'goertzel-processor', {
+    rxWorklet = new AudioWorkletNode(rxCtx, 'goertzel-processor', {
+      numberOfOutputs: 0,           // no audio output needed
       processorOptions: {
-        sampleRate:  rxAudioCtx.sampleRate,
+        sampleRate:  rxCtx.sampleRate,
         freqs:       band.tones,
-        syncFreq:    syncFreq,
-        bw:          band.bw,
-        blockSize:   blockSize,
-        noiseFloor:  noiseFloor
+        syncFreq:    band.syncFreq,
+        blockSize:   band.blockSize,
+        noiseFloor:  band.noiseFloor
       }
     });
 
-    // Message from worklet → main thread (very fast, structured clone)
-    rxWorkletNode.port.onmessage = (e) => {
-      const { pos, confidence } = e.data;
+    // ── Message handler — fires as fast as blocks arrive ──────
+    rxWorklet.port.onmessage = ({ data: { pos, conf } }) => {
       if (pos === null) {
-        voteBuffer = [];
+        // Signal lost
         document.getElementById('confFill').style.width = '0%';
-        document.getElementById('confPct').textContent = '0%';
+        document.getElementById('confPct').textContent  = '0%';
         return;
       }
-      // Majority vote — window of 3 for minimal latency
-      voteBuffer.push(pos);
-      if (voteBuffer.length > VOTE_WINDOW) voteBuffer.shift();
-      const counts = {};
-      voteBuffer.forEach(p => counts[p] = (counts[p]||0) + 1);
-      let winner = pos, wCount = 0;
-      Object.entries(counts).forEach(([p,c]) => {
-        if (c > wCount) { winner = parseInt(p); wCount = c; }
-      });
-      if (wCount >= 2) updateLaptopPos(POSITIONS[winner], confidence);
+      // No vote window — update immediately on every block
+      updateLaptopPos(POSITIONS[pos], conf);
     };
 
-    // Also create analyser for spectrum display only (not for decoding)
-    rxAnalyser = rxAudioCtx.createAnalyser();
+    // Separate analyser for spectrum display only
+    rxAnalyser = rxCtx.createAnalyser();
     rxAnalyser.fftSize = 2048;
-    rxAnalyser.smoothingTimeConstant = 0;
+    rxAnalyser.smoothingTimeConstant = 0;   // zero smoothing = live
 
-    source.connect(rxWorkletNode);
-    source.connect(rxAnalyser);
-    // Worklet doesn't need to output audio
-    rxWorkletNode.connect(rxAudioCtx.destination);
+    src.connect(rxWorklet);
+    src.connect(rxAnalyser);
 
     listening = true;
-    voteBuffer = [];
     document.getElementById('rxBtn').textContent = '⏹ Stop Listening';
     document.getElementById('rxBtn').classList.add('active');
-    setStatus('on', 'Listening · ' + BANDS[currentBand].label);
+    setStatus('on', 'RX · ' + BANDS[currentBand].label);
     drawSpectrum();
 
-  } catch(e) {
-    setStatus('err', 'Mic error: ' + e.message);
-    console.error(e);
+  } catch (err) {
+    setStatus('err', 'Mic error: ' + err.message);
+    console.error(err);
   }
 }
 
 function stopListen() {
   listening = false;
-  if (specAnimFrame) { cancelAnimationFrame(specAnimFrame); specAnimFrame = null; }
-  if (rxWorkletNode) { rxWorkletNode.disconnect(); rxWorkletNode = null; }
-  if (rxStream)      { rxStream.getTracks().forEach(t => t.stop()); rxStream = null; }
-  if (rxAudioCtx)    { rxAudioCtx.close(); rxAudioCtx = null; }
+  if (specRaf)    { cancelAnimationFrame(specRaf); specRaf = null; }
+  if (rxWorklet)  { rxWorklet.disconnect();  rxWorklet  = null; }
+  if (rxStream)   { rxStream.getTracks().forEach(t => t.stop()); rxStream = null; }
+  if (rxCtx)      { rxCtx.close(); rxCtx = null; }
   rxAnalyser = null;
   document.getElementById('rxBtn').textContent = '🎤 Start Listening';
   document.getElementById('rxBtn').classList.remove('active');
   document.getElementById('laptopThumb').classList.remove('active');
   document.getElementById('confFill').style.width = '0%';
-  document.getElementById('confPct').textContent = '0%';
+  document.getElementById('confPct').textContent  = '0%';
   if (currentMode === 'laptop') setStatus('idle');
 }
 
-function toggleListen() {
-  if (listening) stopListen(); else startListen();
-}
+function toggleListen() { listening ? stopListen() : startListen(); }
 
-function updateLaptopPos(pos, confidence) {
-  if (pos === lastRxPos) return;
+function updateLaptopPos(pos, conf) {
+  // Always update confidence display
+  document.getElementById('confFill').style.width = conf + '%';
+  document.getElementById('confPct').textContent  = conf + '%';
+
+  if (pos === lastRxPos) return;   // skip DOM update if position unchanged
   lastRxPos = pos;
-  document.getElementById('laptopPos').textContent = POS_LABELS[pos] || pos;
-  document.getElementById('confFill').style.width = confidence + '%';
-  document.getElementById('confPct').textContent = confidence + '%';
 
-  const joystick = document.getElementById('laptopJoystick');
-  const thumb    = document.getElementById('laptopThumb');
-  const r = joystick.offsetWidth / 2;
-  const coords = {
+  document.getElementById('laptopPos').textContent = POS_LABELS[pos];
+
+  // Move thumb
+  const jEl  = document.getElementById('laptopJoystick');
+  const thumb = document.getElementById('laptopThumb');
+  const r    = jEl.offsetWidth / 2;
+  const MAP  = {
     NW:[-0.6,-0.6], N:[0,-0.6], NE:[0.6,-0.6],
-    W:[-0.6,0], CENTER:[0,0], E:[0.6,0],
-    SW:[-0.6,0.6], S:[0,0.6], SE:[0.6,0.6]
+    W:[-0.6,0],     CENTER:[0,0], E:[0.6,0],
+    SW:[-0.6,0.6],  S:[0,0.6],  SE:[0.6,0.6]
   };
-  const [nx, ny] = coords[pos] || [0,0];
+  const [nx, ny] = MAP[pos] ?? [0,0];
   thumb.style.left = (r + nx * r * 0.75) + 'px';
   thumb.style.top  = (r + ny * r * 0.75) + 'px';
   thumb.classList.toggle('active', pos !== 'CENTER');
 
   POSITIONS.forEach(p => {
-    const el = document.getElementById('lz_' + p);
-    if (el) el.classList.toggle('lit', p === pos);
+    document.getElementById('lz_' + p)?.classList.toggle('lit', p === pos);
   });
 }
 
-// ---- SPECTRUM (visual only, uses separate analyser) ----
+// ── spectrum display (visual only, decoupled from decode) ──────
 function drawSpectrum() {
   const canvas = document.getElementById('specCanvas');
-  const ctx    = canvas.getContext('2d');
+  const ctx2   = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
 
-  function frame() {
+  const tick = () => {
     if (!listening || !rxAnalyser) return;
-    const bufLen = rxAnalyser.frequencyBinCount;
-    const data   = new Uint8Array(bufLen);
-    rxAnalyser.getByteFrequencyData(data);
 
-    ctx.fillStyle = '#0d0d1a';
-    ctx.fillRect(0, 0, W, H);
+    const buf  = new Uint8Array(rxAnalyser.frequencyBinCount);
+    rxAnalyser.getByteFrequencyData(buf);
 
-    const band      = BANDS[currentBand];
-    const sampleRate = rxAudioCtx ? rxAudioCtx.sampleRate : 44100;
-    const fftSize   = rxAnalyser.fftSize;
-    const minFreq   = Math.max(1, band.tones[0] * 0.7);
-    const maxFreq   = band.tones[8] * 1.3;
+    ctx2.fillStyle = '#0d0d1a';
+    ctx2.fillRect(0, 0, W, H);
 
-    function fToBin(f) { return Math.round(f * fftSize / sampleRate); }
-    const binLo = fToBin(minFreq);
-    const binHi = Math.min(bufLen - 1, fToBin(maxFreq));
-    const range = Math.max(1, binHi - binLo);
+    const band = BANDS[currentBand];
+    const sr   = rxCtx?.sampleRate ?? 44100;
+    const fs   = rxAnalyser.fftSize;
+    const fMin = Math.max(1, band.tones[0] * 0.6);
+    const fMax = band.tones[8] * 1.4;
+    const bLo  = Math.round(fMin * fs / sr);
+    const bHi  = Math.min(buf.length - 1, Math.round(fMax * fs / sr));
+    const span = Math.max(1, bHi - bLo);
 
-    for (let i = binLo; i <= binHi; i++) {
-      const x    = Math.round((i - binLo) / range * W);
-      const barH = (data[i] / 255) * H;
-      const hue  = 180 + (data[i] / 255) * 60;
-      ctx.fillStyle = `hsl(${hue},100%,55%)`;
-      ctx.fillRect(x, H - barH, Math.max(1, W / range), barH);
+    for (let i = bLo; i <= bHi; i++) {
+      const x    = Math.round((i - bLo) / span * W);
+      const barH = (buf[i] / 255) * H;
+      ctx2.fillStyle = `hsl(${180 + (buf[i]/255)*60},100%,55%)`;
+      ctx2.fillRect(x, H - barH, Math.max(1, W / span), barH);
     }
 
-    // Mark expected tone positions
+    // Marker lines for each expected tone
     const rxIdx = POSITIONS.indexOf(lastRxPos);
-    band.tones.forEach((freq, idx) => {
-      const x = Math.round((fToBin(freq) - binLo) / range * W);
-      ctx.strokeStyle = idx === rxIdx ? '#00e676' : '#ffffff22';
-      ctx.lineWidth   = idx === rxIdx ? 2 : 1;
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    band.tones.forEach((f, i) => {
+      const x = Math.round((Math.round(f * fs / sr) - bLo) / span * W);
+      ctx2.strokeStyle = i === rxIdx ? '#00e676' : '#ffffff22';
+      ctx2.lineWidth   = i === rxIdx ? 2 : 1;
+      ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, H); ctx2.stroke();
     });
 
-    specAnimFrame = requestAnimationFrame(frame);
-  }
-  frame();
+    specRaf = requestAnimationFrame(tick);
+  };
+  tick();
 }
 
-// ============================================================
-//  INIT
-// ============================================================
-buildPhoneGrid();
-buildLaptopGrid();
+// ── init ───────────────────────────────────────────────────────
+buildGrid('phoneZoneGrid',  'pz_', 'zone-cell');
+buildGrid('laptopZoneGrid', 'lz_', 'laptop-zone-cell');
 initJoystick();
 setMode('phone');
 document.getElementById('txVolLabel').textContent =
