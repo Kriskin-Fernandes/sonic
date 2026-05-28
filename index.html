@@ -9,8 +9,7 @@
   :root {
     --bg: #0d0d1a; --panel: #161628; --accent: #00e5ff;
     --accent2: #7c4dff; --green: #00e676; --red: #ff1744;
-    --orange: #ff9100;
-    --text: #e0e0ff; --muted: #555577; --radius: 16px;
+    --orange: #ff9100; --text: #e0e0ff; --muted: #555577; --radius: 16px;
   }
   body {
     background: var(--bg); color: var(--text);
@@ -20,10 +19,7 @@
   }
   h1 { font-size: 1.4rem; color: var(--accent); letter-spacing: 2px; text-align: center; }
   .subtitle { font-size: 0.75rem; color: var(--muted); text-align: center; }
-  .mode-bar {
-    display: flex; gap: 8px; background: var(--panel);
-    border-radius: 50px; padding: 4px;
-  }
+  .mode-bar { display: flex; gap: 8px; background: var(--panel); border-radius: 50px; padding: 4px; }
   .mode-btn {
     padding: 8px 22px; border: none; border-radius: 50px; cursor: pointer;
     font-size: 0.85rem; font-weight: 600; background: transparent;
@@ -39,27 +35,10 @@
   .freq-btn.active { border-color: var(--accent); color: var(--accent); background: #00e5ff18; }
   .status-row { display: flex; align-items: center; gap: 10px; }
   .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); transition: background .3s; }
-  .dot.on      { background: var(--green);  box-shadow: 0 0 8px var(--green); }
-  .dot.err     { background: var(--red);    box-shadow: 0 0 8px var(--red); }
+  .dot.on          { background: var(--green);  box-shadow: 0 0 8px var(--green); }
+  .dot.err         { background: var(--red);    box-shadow: 0 0 8px var(--red); }
   .dot.calibrating { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
   #statusText { font-size: 0.8rem; color: var(--muted); }
-
-  /* noise filter controls */
-  .filter-row {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
-    font-size: 0.8rem; color: var(--muted);
-    background: var(--panel); border-radius: var(--radius);
-    padding: 10px 14px; max-width: 500px; width: 100%;
-  }
-  .filter-row label { color: var(--text); font-weight: 600; width: 100%; }
-  .filter-row input[type=range] { width: 110px; accent-color: var(--accent); }
-  .filter-row span { min-width: 32px; }
-  .recal-btn {
-    padding: 4px 12px; border: 1.5px solid var(--orange); border-radius: 50px;
-    background: transparent; color: var(--orange); font-size: 0.75rem;
-    cursor: pointer; transition: all .2s; margin-left: auto;
-  }
-  .recal-btn:hover { background: #ff910018; }
 
   /* PHONE */
   #phoneMode { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
@@ -108,6 +87,18 @@
   }
   .wave-btn.active { border-color: var(--accent2); color: var(--accent2); background: #7c4dff18; }
 
+  /* channel indicators on phone */
+  .ch-row {
+    display: flex; gap: 10px; align-items: center; font-size: 0.8rem; color: var(--muted);
+  }
+  .ch-pip {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--muted); display: flex; align-items: center;
+    justify-content: center; font-size: 0.65rem; font-weight: 700;
+    transition: all .1s;
+  }
+  .ch-pip.on { border-color: var(--accent); background: #00e5ff22; color: var(--accent); }
+
   /* LAPTOP */
   #laptopMode { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
   .laptop-joystick {
@@ -137,6 +128,36 @@
     font-size: 2rem; font-weight: 900; color: var(--green);
     letter-spacing: 4px; min-height: 2.5rem; text-align: center;
   }
+
+  /* channel indicators on laptop */
+  .rx-ch-row {
+    display: flex; gap: 10px; align-items: center; font-size: 0.8rem; color: var(--muted);
+  }
+  .rx-ch-pip {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--muted); display: flex; align-items: center;
+    justify-content: center; font-size: 0.65rem; font-weight: 700;
+    transition: all .1s;
+  }
+  .rx-ch-pip.on { border-color: var(--green); background: #00e67622; color: var(--green); }
+
+  .filter-row {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--muted);
+    background: var(--panel); border-radius: var(--radius);
+    padding: 10px 14px; max-width: 500px; width: 100%;
+  }
+  .filter-row label { color: var(--text); font-weight: 600; width: 100%; }
+  .filter-row input[type=range] { width: 110px; accent-color: var(--accent); }
+  .filter-row span { min-width: 36px; }
+  .recal-btn {
+    padding: 4px 12px; border: 1.5px solid var(--orange); border-radius: 50px;
+    background: transparent; color: var(--orange); font-size: 0.75rem;
+    cursor: pointer; transition: all .2s; margin-left: auto;
+  }
+  .recal-btn:hover { background: #ff910018; }
+  .noise-row { font-size: 0.75rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+  .noise-row span { color: var(--orange); font-weight: 600; }
   .spectrum-wrap {
     width: min(500px, 95vw); background: var(--panel);
     border-radius: var(--radius); padding: 10px;
@@ -154,11 +175,6 @@
   .conf-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--muted); }
   .conf-bar { width: 150px; height: 8px; background: #222; border-radius: 4px; overflow: hidden; }
   .conf-fill { height: 100%; background: var(--green); width: 0%; transition: width .04s; border-radius: 4px; }
-  .noise-row {
-    font-size: 0.75rem; color: var(--muted);
-    display: flex; gap: 8px; align-items: center;
-  }
-  .noise-row span { color: var(--orange); font-weight: 600; }
   .hidden { display: none !important; }
   .info-box {
     background: var(--panel); border-radius: var(--radius); padding: 12px 16px;
@@ -178,9 +194,9 @@
 </div>
 
 <div class="freq-bar">
-  <button class="freq-btn active" id="fLow"       onclick="setFreqBand('low')">🔊 Low (400–800 Hz)</button>
-  <button class="freq-btn"        id="fBass"      onclick="setFreqBand('bass')">🔉 Bass (100–200 Hz)</button>
-  <button class="freq-btn"        id="fUltrasonic" onclick="setFreqBand('ultrasonic')">🔇 Ultrasonic (18 kHz)</button>
+  <button class="freq-btn"        id="fLow"        onclick="setFreqBand('low')">🔊 Low (400–800 Hz)</button>
+  <button class="freq-btn"        id="fBass"       onclick="setFreqBand('bass')">🔉 Bass (100–200 Hz)</button>
+  <button class="freq-btn active" id="fUltrasonic" onclick="setFreqBand('ultrasonic')">🔇 Ultrasonic (18 kHz)</button>
 </div>
 
 <div class="status-row">
@@ -191,6 +207,16 @@
 <!-- ══════════ PHONE MODE ══════════ -->
 <div id="phoneMode">
   <div class="pos-label" id="phonePos">CENTER</div>
+
+  <!-- Live channel indicators -->
+  <div class="ch-row">
+    Channels:
+    <div class="ch-pip" id="txCh0">C1</div>
+    <div class="ch-pip" id="txCh1">C2</div>
+    <div class="ch-pip" id="txCh2">C3</div>
+    <div class="ch-pip" id="txCh3">C4</div>
+  </div>
+
   <div class="joystick-wrap" id="joystickWrap">
     <div class="zone-grid" id="phoneZoneGrid"></div>
     <div class="joystick-thumb" id="joystickThumb"></div>
@@ -207,35 +233,42 @@
   </div>
   <button class="tx-btn" id="txBtn" onclick="toggleTransmit()">▶ Start Transmitting</button>
   <div class="info-box">
-    <b>Phone tips:</b><br>
-    • <b>Low (400–800 Hz)</b> is the most reliable band.<br>
-    • <b>Ultrasonic (18 kHz)</b> is silent — best in noisy rooms.<br>
-    • <b>Bass (100–200 Hz)</b> may crackle — reduce volume if so.<br>
-    • Triangle waveform is gentler on small speakers.
+    <b>Encoding:</b> 4 binary channels = 16 possible states (9 used).<br>
+    Each channel is an independent tone — present = 1, absent = 0.<br>
+    <b>Ultrasonic</b> is inaudible and avoids room noise entirely.
   </div>
 </div>
 
 <!-- ══════════ LAPTOP MODE ══════════ -->
 <div id="laptopMode" class="hidden">
 
-  <!-- Noise filter controls -->
-  <div class="filter-row" id="filterControls">
-    <label>🎛 Noise Filter Settings</label>
+  <div class="filter-row">
+    <label>🎛 Noise Filter</label>
     SNR gate:
-    <input type="range" id="snrSlider" min="1" max="20" step="0.5" value="6" />
-    <span id="snrVal">6 dB</span>
+    <input type="range" id="snrSlider" min="1" max="20" step="0.5" value="20" />
+    <span id="snrVal">20 dB</span>
      |  Streak:
-    <input type="range" id="streakSlider" min="1" max="8" step="1" value="3" />
-    <span id="streakVal">3</span>
+    <input type="range" id="streakSlider" min="1" max="8" step="1" value="1" />
+    <span id="streakVal">1</span>
     <button class="recal-btn" onclick="startCalibration()">⟳ Re-calibrate</button>
   </div>
 
   <div class="noise-row">
     Noise floor: <span id="noiseFloorDisplay">calibrating…</span>
-     |  SNR margin: <span id="snrDisplay">—</span>
+     |  SNR: <span id="snrDisplay">—</span>
   </div>
 
   <div class="rx-label" id="laptopPos">---</div>
+
+  <!-- Live channel indicators -->
+  <div class="rx-ch-row">
+    Channels:
+    <div class="rx-ch-pip" id="rxCh0">C1</div>
+    <div class="rx-ch-pip" id="rxCh1">C2</div>
+    <div class="rx-ch-pip" id="rxCh2">C3</div>
+    <div class="rx-ch-pip" id="rxCh3">C4</div>
+  </div>
+
   <div class="laptop-joystick" id="laptopJoystick">
     <div class="laptop-zone-grid" id="laptopZoneGrid"></div>
     <div class="laptop-thumb"    id="laptopThumb"></div>
@@ -246,32 +279,30 @@
     <span id="confPct">0%</span>
   </div>
   <div class="spectrum-wrap">
-    <h3>Live spectrum</h3>
+    <h3>Live spectrum — 4 channel tones marked</h3>
     <canvas id="specCanvas" width="500" height="80"></canvas>
   </div>
   <button class="rx-btn" id="rxBtn" onclick="toggleListen()">🎤 Start Listening</button>
   <div class="info-box">
     <b>Laptop tips:</b><br>
-    • The system auto-calibrates the noise floor on startup (1 sec).<br>
-    • Increase <b>SNR gate</b> if you get false positives in noisy rooms.<br>
-    • Increase <b>Streak</b> to require more consecutive matches before accepting.<br>
-    • Hit <b>Re-calibrate</b> if background noise changes.<br>
-    • <b>Ultrasonic</b> band avoids most room noise entirely.
+    • Auto-calibrates noise floor for 1 sec on startup.<br>
+    • <b>SNR 20 dB</b> = very strict — lower if signal isn't detected.<br>
+    • <b>Streak 1</b> = instant response — raise if jitter returns.<br>
+    • Hit <b>Re-calibrate</b> if background noise changes.
   </div>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-//  SONIC JOYSTICK — Noise-filtered edition
+//  SONIC JOYSTICK — 4-channel binary encoding edition
 //
-//  RX noise filtering stack (all in AudioWorklet thread):
-//    1. Adaptive noise floor calibration (1 sec ambient measurement)
-//    2. SNR gate — signal must exceed noise floor by N dB
-//    3. Hysteresis — new pos must beat current pos confidence by margin
-//    4. Streak counter — N consecutive matching blocks required
-//    5. Band-pass pre-filter on RX chain (Web Audio, before worklet)
+//  Encoding: 4 independent tones (channels), each ON or OFF.
+//  9 positions map to unique 4-bit patterns.
+//  Decoder checks each channel independently via Goertzel.
+//  This is far more robust than "pick loudest of 9" — each
+//  channel decision is binary and independent.
 //
-//  New band: Ultrasonic 18 kHz (avoids most ambient noise)
+//  Defaults: Ultrasonic band, SNR=20dB, Streak=1
 // ═══════════════════════════════════════════════════════════════
 
 const POSITIONS = ['NW','N','NE','W','CENTER','E','SW','S','SE'];
@@ -286,94 +317,107 @@ const GRID_MAP = [
   ['SW','S','SE']
 ];
 
-// ── Bands ──────────────────────────────────────────────────────
+// ── 4-bit encoding table ───────────────────────────────────────
+// Each position = [ch1, ch2, ch3, ch4]  (1=tone ON, 0=tone OFF)
+// Chosen so every position has a unique pattern and
+// adjacent positions differ by at least 1 bit
+const ENCODING = {
+  CENTER: [0,0,0,0],
+  N:      [1,0,0,0],
+  S:      [0,1,0,0],
+  E:      [0,0,1,0],
+  W:      [0,0,0,1],
+  NE:     [1,0,1,0],
+  NW:     [1,0,0,1],
+  SE:     [0,1,1,0],
+  SW:     [0,1,0,1]
+};
+
+// Reverse lookup: "0101" → position name
+const DECODE_MAP = {};
+Object.entries(ENCODING).forEach(([pos, bits]) => {
+  DECODE_MAP[bits.join('')] = pos;
+});
+
+// ── Bands — 4 channel tones + 1 sync tone per band ────────────
+// Channel tones must be well-separated and within the band range.
+// Sync tone is always-on beacon (tells RX "signal is present").
 const BANDS = {
   low: {
-    label:      'Low (400–800 Hz)',
-    tones:      [400, 444, 489, 533, 578, 622, 667, 711, 756],
-    syncFreq:   356,
-    bw:         18,
-    blockSize:  256,
-    noiseFloor: 0.0008,
-    oscGain:    0.38,
-    hpfCutoff:  200,
-    rampTime:   0.004,
-    // Band-pass filter for RX chain
-    bpfFreq:    578,    // centre of tone range
-    bpfQ:       3.0     // moderate Q — covers full 400–800 Hz range
+    label:     'Low (400–800 Hz)',
+    // 4 channel tones spread across 400–800 Hz
+    chTones:   [420, 530, 640, 750],
+    syncFreq:  370,
+    hpfCutoff: 200,
+    rampTime:  0.004,
+    oscGain:   0.32,   // 5 oscs max (sync+4ch) — keep headroom
+    blockSize: 256,
+    bpfFreq:   585, bpfQ: 2.5,
+    noiseFloor:0.0008
   },
   bass: {
-    label:      'Bass (100–200 Hz)',
-    tones:      [100, 112, 125, 137, 150, 162, 175, 187, 200],
-    syncFreq:   88,
-    bw:         5,
-    blockSize:  1024,
-    noiseFloor: 0.0004,
-    oscGain:    0.28,
-    hpfCutoff:  60,
-    rampTime:   0.012,
-    bpfFreq:    150,
-    bpfQ:       2.0
+    label:     'Bass (100–200 Hz)',
+    chTones:   [108, 133, 158, 183],
+    syncFreq:  95,
+    hpfCutoff: 60,
+    rampTime:  0.012,
+    oscGain:   0.24,
+    blockSize: 1024,
+    bpfFreq:   148, bpfQ: 2.0,
+    noiseFloor:0.0004
   },
   ultrasonic: {
-    label:      'Ultrasonic (18 kHz)',
-    // 9 tones spaced 200 Hz apart: 17600–19200 Hz
-    tones:      [17600, 17800, 18000, 18200, 18400, 18600, 18800, 19000, 19200],
-    syncFreq:   17400,
-    bw:         80,
-    blockSize:  256,    // ~5.8 ms — fast decode, high freqs resolve easily
-    noiseFloor: 0.0002, // ultrasonic range is very quiet in most rooms
-    oscGain:    0.45,   // can be louder — inaudible to humans
-    hpfCutoff:  15000,  // steep HPF — kills all audible-range noise
-    rampTime:   0.004,
-    bpfFreq:    18400,
-    bpfQ:       8.0     // tight Q — ultrasonic band is narrow, reject everything else
+    label:     'Ultrasonic (18 kHz)',
+    // 4 channel tones spread across 17600–19200 Hz, 400 Hz apart
+    chTones:   [17700, 18100, 18500, 18900],
+    syncFreq:  17300,
+    hpfCutoff: 15000,
+    rampTime:  0.004,
+    oscGain:   0.40,
+    blockSize: 256,
+    bpfFreq:   18300, bpfQ: 8.0,
+    noiseFloor:0.0002
   }
 };
 
-// ── AudioWorklet — Goertzel + full noise filter stack ─────────
+// ── AudioWorklet — 4-channel binary Goertzel decoder ──────────
 const WORKLET_SRC = `
 class GoertzelProcessor extends AudioWorkletProcessor {
   constructor(opt) {
     super();
-    const p          = opt.processorOptions;
-    this.sr          = p.sampleRate;
-    this.freqs       = p.freqs;
-    this.syncFreq    = p.syncFreq;
-    this.blockSize   = p.blockSize;
-    this.floor       = p.noiseFloor;
+    const p           = opt.processorOptions;
+    this.sr           = p.sampleRate;
+    this.chTones      = p.chTones;       // 4 channel frequencies
+    this.syncFreq     = p.syncFreq;
+    this.blockSize    = p.blockSize;
+    this.floor        = p.noiseFloor;
+    this.snrGainDb    = p.snrGainDb    ?? 20;
+    this.streakNeeded = p.streakNeeded ?? 1;
+    this.buf          = [];
 
-    // Noise filter params (updated live via port messages)
-    this.snrGainDb   = p.snrGainDb   ?? 6;    // dB above noise floor required
-    this.streakNeeded= p.streakNeeded ?? 3;    // consecutive blocks needed
-    this.hystMargin  = p.hystMargin   ?? 0.15; // confidence margin for hysteresis
+    // Calibration
+    this.calibrating  = true;
+    this.calibBuf     = [];
+    this.calibSamples = p.calibSamples ?? 44100;
+    this.noisePower   = this.floor;
 
-    // Internal state
-    this.buf           = [];
-    this.calibrating   = true;
-    this.calibBuf      = [];
-    this.calibSamples  = p.calibSamples ?? 44100; // 1 second
-    this.noisePower    = 0;   // measured ambient power per tone
-    this.currentPos    = -1;  // currently accepted position
-    this.currentConf   = 0;
-    this.streakPos     = -1;  // candidate being streaked
-    this.streakCount   = 0;
+    // Streak state — one per channel (independent)
+    this.streakBits   = [0,0,0,0];
+    this.streakCounts = [0,0,0,0];
+    this.currentBits  = [0,0,0,0];
 
     // Pre-compute coefficients
-    this.coeffs     = this.freqs.map(f => this._coeff(f));
-    this.syncCoeff  = this._coeff(this.syncFreq);
+    this.chCoeffs  = this.chTones.map(f => this._coeff(f));
+    this.syncCoeff = this._coeff(this.syncFreq);
 
-    // Listen for live param updates from main thread
     this.port.onmessage = (e) => {
-      if (e.data.snrGainDb   !== undefined) this.snrGainDb    = e.data.snrGainDb;
+      if (e.data.snrGainDb    !== undefined) this.snrGainDb    = e.data.snrGainDb;
       if (e.data.streakNeeded !== undefined) this.streakNeeded = e.data.streakNeeded;
       if (e.data.recalibrate)               { this.calibrating = true; this.calibBuf = []; }
     };
   }
 
-  _coeff(freq) {
-    return 2 * Math.cos(2 * Math.PI * freq / this.sr);
-  }
+  _coeff(f) { return 2 * Math.cos(2 * Math.PI * f / this.sr); }
 
   _goertzel(samples, coeff) {
     let s1 = 0, s2 = 0;
@@ -384,13 +428,12 @@ class GoertzelProcessor extends AudioWorkletProcessor {
     return s1*s1 + s2*s2 - s1*s2*coeff;
   }
 
-  // Measure average power across all tone bins — this IS the noise floor
-  _measureNoisePower(block) {
-    let total = 0;
-    for (let i = 0; i < this.coeffs.length; i++) {
-      total += this._goertzel(block, this.coeffs[i]);
-    }
-    return total / this.coeffs.length;
+  _avgNoisePower(block) {
+    // Average Goertzel power across all 4 channel tones
+    // This is the ambient noise level at our specific frequencies
+    let t = 0;
+    for (let i = 0; i < this.chCoeffs.length; i++) t += this._goertzel(block, this.chCoeffs[i]);
+    return t / this.chCoeffs.length;
   }
 
   process(inputs) {
@@ -401,21 +444,17 @@ class GoertzelProcessor extends AudioWorkletProcessor {
     while (this.buf.length >= this.blockSize) {
       const block = this.buf.splice(0, this.blockSize);
 
-      // ── Phase 1: Calibration ─────────────────────────────────
+      // ── Calibration phase ──────────────────────────────────
       if (this.calibrating) {
-        for (let s of block) this.calibBuf.push(s);
+        for (const s of block) this.calibBuf.push(s);
         this.port.postMessage({ calibrating: true, progress: this.calibBuf.length / this.calibSamples });
-
         if (this.calibBuf.length >= this.calibSamples) {
-          // Compute noise power from calibration recording
-          // Split into blocks and average
-          let totalPow = 0, count = 0;
+          let total = 0, count = 0;
           for (let i = 0; i + this.blockSize <= this.calibBuf.length; i += this.blockSize) {
-            const b = this.calibBuf.slice(i, i + this.blockSize);
-            totalPow += this._measureNoisePower(b);
+            total += this._avgNoisePower(this.calibBuf.slice(i, i + this.blockSize));
             count++;
           }
-          this.noisePower  = count > 0 ? totalPow / count : this.floor;
+          this.noisePower  = count > 0 ? total / count : this.floor;
           this.calibrating = false;
           this.calibBuf    = [];
           this.port.postMessage({ calibrated: true, noisePower: this.noisePower });
@@ -423,67 +462,66 @@ class GoertzelProcessor extends AudioWorkletProcessor {
         continue;
       }
 
-      // ── Phase 2: Sync gate ───────────────────────────────────
-      const syncPow = this._goertzel(block, this.syncCoeff);
+      // ── Sync gate ─────────────────────────────────────────
+      const syncPow    = this._goertzel(block, this.syncCoeff);
+      const snrLinear  = Math.pow(10, this.snrGainDb / 10);
+      const snrRatio   = syncPow / (this.noisePower + 1e-12);
 
-      // SNR gate: sync must be snrGainDb above noise floor
-      const snrLinear = Math.pow(10, this.snrGainDb / 10);
       if (syncPow < this.noisePower * snrLinear) {
-        // No valid signal — reset streak, report silence
-        this.streakPos   = -1;
-        this.streakCount = 0;
-        this.port.postMessage({ pos: null, conf: 0, snr: syncPow / (this.noisePower + 1e-12) });
+        // No signal — reset everything
+        this.streakCounts = [0,0,0,0];
+        this.streakBits   = [0,0,0,0];
+        this.port.postMessage({ pos: null, conf: 0, bits: null, snr: snrRatio });
         continue;
       }
 
-      // ── Phase 3: Find best data tone ─────────────────────────
-      let bestIdx = 0, bestPow = -1, secondPow = -1;
-      const powers = [];
-      for (let i = 0; i < this.freqs.length; i++) {
-        const p = this._goertzel(block, this.coeffs[i]);
+      // ── Decode each channel independently ─────────────────
+      // A channel is ON if its power exceeds noise floor by snrLinear
+      // This is a binary decision per channel — no "loudest wins"
+      const rawBits = [];
+      const powers  = [];
+      for (let i = 0; i < this.chCoeffs.length; i++) {
+        const p = this._goertzel(block, this.chCoeffs[i]);
         powers.push(p);
-        if (p > bestPow) { secondPow = bestPow; bestPow = p; bestIdx = i; }
-        else if (p > secondPow) { secondPow = p; }
+        rawBits.push(p > this.noisePower * snrLinear ? 1 : 0);
       }
 
-      // Confidence: how much louder is the winner vs runner-up
-      // This is more robust than ratio-to-sync for noisy environments
-      const separation = secondPow > 0 ? bestPow / secondPow : 10;
-      const conf = Math.min(100, Math.round(Math.log2(separation + 1) * 40));
-
-      // ── Phase 4: Hysteresis ───────────────────────────────────
-      // Only switch position if new candidate is meaningfully better
-      // than the currently held position
-      if (bestIdx === this.currentPos) {
-        // Reinforcing current position — just update confidence
-        this.currentConf = conf;
-        this.streakPos   = bestIdx;
-        this.streakCount = this.streakNeeded; // already confirmed
-        this.port.postMessage({ pos: bestIdx, conf, snr: syncPow / (this.noisePower + 1e-12) });
-        continue;
+      // ── Per-channel streak ────────────────────────────────
+      // Each channel must be consistent for streakNeeded blocks
+      const stableBits = [...this.currentBits];
+      let changed = false;
+      for (let i = 0; i < 4; i++) {
+        if (rawBits[i] === this.streakBits[i]) {
+          this.streakCounts[i]++;
+        } else {
+          this.streakBits[i]   = rawBits[i];
+          this.streakCounts[i] = 1;
+        }
+        if (this.streakCounts[i] >= this.streakNeeded) {
+          if (stableBits[i] !== this.streakBits[i]) {
+            stableBits[i] = this.streakBits[i];
+            changed = true;
+          }
+        }
       }
 
-      // New candidate — check hysteresis margin
-      const hystThreshold = this.currentConf * (1 - this.hystMargin);
-      if (conf < hystThreshold && this.currentPos !== -1) {
-        // Not confident enough to switch — ignore
-        continue;
-      }
+      if (changed) this.currentBits = [...stableBits];
 
-      // ── Phase 5: Streak counter ───────────────────────────────
-      if (bestIdx === this.streakPos) {
-        this.streakCount++;
-      } else {
-        this.streakPos   = bestIdx;
-        this.streakCount = 1;
+      // ── Confidence: how many channels are unambiguous ─────
+      // A channel is "confident" if its power is well above OR well below noise
+      let confScore = 0;
+      for (let i = 0; i < 4; i++) {
+        const ratio = powers[i] / (this.noisePower + 1e-12);
+        if (ratio > snrLinear * 2 || ratio < 0.5) confScore++;
       }
+      const conf = Math.round((confScore / 4) * 100);
 
-      if (this.streakCount >= this.streakNeeded) {
-        // Accepted — commit position change
-        this.currentPos  = bestIdx;
-        this.currentConf = conf;
-        this.port.postMessage({ pos: bestIdx, conf, snr: syncPow / (this.noisePower + 1e-12) });
-      }
+      this.port.postMessage({
+        bits:    this.currentBits,
+        rawBits: rawBits,
+        conf,
+        snr:     snrRatio
+      });
     }
     return true;
   }
@@ -493,17 +531,15 @@ registerProcessor('goertzel-processor', GoertzelProcessor);
 
 // ── State ──────────────────────────────────────────────────────
 let currentMode  = 'phone';
-let currentBand  = 'low';
+let currentBand  = 'ultrasonic';
 let currentWave  = 'sine';
 let transmitting = false;
 let listening    = false;
 let joystickPos  = 'CENTER';
 let lastRxPos    = null;
 let txVolume     = 0.8;
-
-// Noise filter params (mirrored to worklet via messages)
-let snrGainDb    = 6;
-let streakNeeded = 3;
+let snrGainDb    = 20;
+let streakNeeded = 1;
 
 let txCtx        = null;
 let txOscs       = [];
@@ -574,17 +610,15 @@ document.getElementById('snrSlider').addEventListener('input', function () {
   document.getElementById('snrVal').textContent = snrGainDb + ' dB';
   if (rxWorklet) rxWorklet.port.postMessage({ snrGainDb });
 });
-
 document.getElementById('streakSlider').addEventListener('input', function () {
   streakNeeded = parseInt(this.value);
   document.getElementById('streakVal').textContent = streakNeeded;
   if (rxWorklet) rxWorklet.port.postMessage({ streakNeeded });
 });
-
 function startCalibration() {
   if (rxWorklet) {
     rxWorklet.port.postMessage({ recalibrate: true });
-    setStatus('calibrating', 'Re-calibrating noise floor…');
+    setStatus('calibrating', 'Re-calibrating…');
   }
 }
 
@@ -640,9 +674,15 @@ function applyZone(pos) {
   POSITIONS.forEach(p => {
     document.getElementById('pz_' + p)?.classList.toggle('active-zone', p === pos);
   });
+  // Update TX channel indicators
+  const bits = ENCODING[pos] || [0,0,0,0];
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('txCh' + i)?.classList.toggle('on', bits[i] === 1);
+  }
   if (transmitting) playTones(pos);
 }
 
+// ── TX audio chain ─────────────────────────────────────────────
 function startTransmit() {
   if (txCtx) txCtx.close();
   txCtx = new AudioContext({ latencyHint: 'interactive', sampleRate: 44100 });
@@ -655,8 +695,9 @@ function startTransmit() {
   txDCBlock.type = 'highpass'; txDCBlock.frequency.value = 1; txDCBlock.Q.value = 0.1;
 
   txCompressor = txCtx.createDynamicsCompressor();
-  txCompressor.threshold.value = -6; txCompressor.knee.value = 6;
-  txCompressor.ratio.value = 8; txCompressor.attack.value = 0.001; txCompressor.release.value = 0.05;
+  txCompressor.threshold.value = -6;  txCompressor.knee.value     = 6;
+  txCompressor.ratio.value     = 8;   txCompressor.attack.value   = 0.001;
+  txCompressor.release.value   = 0.05;
 
   txMasterGain = txCtx.createGain();
   txMasterGain.gain.value = txVolume;
@@ -693,10 +734,15 @@ function playTones(pos) {
   if (!transmitting || !txCtx) return;
   killOscs();
   const band = BANDS[currentBand];
-  const idx  = POSITIONS.indexOf(pos);
-  if (idx < 0) return;
-  const now = txCtx.currentTime;
-  [band.syncFreq, band.tones[idx]].forEach(freq => {
+  const bits = ENCODING[pos] || [0,0,0,0];
+  const now  = txCtx.currentTime;
+
+  // Always transmit sync beacon
+  const freqsToPlay = [band.syncFreq];
+  // Add channel tones that are ON for this position
+  bits.forEach((b, i) => { if (b === 1) freqsToPlay.push(band.chTones[i]); });
+
+  freqsToPlay.forEach(freq => {
     const osc = txCtx.createOscillator();
     const g   = txCtx.createGain();
     osc.type = currentWave; osc.frequency.value = freq;
@@ -737,45 +783,33 @@ async function startListen() {
 
     const src = rxCtx.createMediaStreamSource(rxStream);
 
-    // ── Band-pass pre-filter ─────────────────────────────────
-    // Narrows the frequency range before Goertzel sees it
-    // Rejects noise outside the target band entirely
     rxBPF = rxCtx.createBiquadFilter();
-    rxBPF.type            = 'bandpass';
-    rxBPF.frequency.value = band.bpfFreq;
-    rxBPF.Q.value         = band.bpfQ;
+    rxBPF.type = 'bandpass'; rxBPF.frequency.value = band.bpfFreq; rxBPF.Q.value = band.bpfQ;
 
     rxWorklet = new AudioWorkletNode(rxCtx, 'goertzel-processor', {
       numberOfOutputs: 0,
       processorOptions: {
         sampleRate:    rxCtx.sampleRate,
-        freqs:         band.tones,
+        chTones:       band.chTones,
         syncFreq:      band.syncFreq,
         blockSize:     band.blockSize,
         noiseFloor:    band.noiseFloor,
         snrGainDb:     snrGainDb,
         streakNeeded:  streakNeeded,
-        hystMargin:    0.15,
-        calibSamples:  rxCtx.sampleRate  // 1 second calibration
+        calibSamples:  rxCtx.sampleRate
       }
     });
 
-    // ── Worklet message handler ──────────────────────────────
     rxWorklet.port.onmessage = ({ data }) => {
-
-      // Calibration progress
       if (data.calibrating) {
         const pct = Math.round(data.progress * 100);
         setStatus('calibrating', `Calibrating… ${pct}%`);
         document.getElementById('noiseFloorDisplay').textContent = `measuring… ${pct}%`;
         return;
       }
-
-      // Calibration complete
       if (data.calibrated) {
         setStatus('on', 'RX · ' + band.label);
-        const np = data.noisePower.toExponential(2);
-        document.getElementById('noiseFloorDisplay').textContent = np;
+        document.getElementById('noiseFloorDisplay').textContent = data.noisePower.toExponential(2);
         return;
       }
 
@@ -785,25 +819,40 @@ async function startListen() {
         document.getElementById('snrDisplay').textContent = snrDb + ' dB';
       }
 
-      // Position update
-      if (data.pos === null) {
+      // No signal
+      if (data.pos === null && !data.bits) {
         document.getElementById('confFill').style.width = '0%';
         document.getElementById('confPct').textContent  = '0%';
+        // Clear channel pips
+        for (let i = 0; i < 4; i++)
+          document.getElementById('rxCh' + i)?.classList.remove('on');
         return;
       }
-      updateLaptopPos(POSITIONS[data.pos], data.conf);
+
+      // Update raw channel indicators (show live bit detection)
+      if (data.rawBits) {
+        for (let i = 0; i < 4; i++) {
+          document.getElementById('rxCh' + i)?.classList.toggle('on', data.rawBits[i] === 1);
+        }
+      }
+
+      // Decode stable bits to position
+      if (data.bits) {
+        const key = data.bits.join('');
+        const pos = DECODE_MAP[key];
+        document.getElementById('confFill').style.width = data.conf + '%';
+        document.getElementById('confPct').textContent  = data.conf + '%';
+        if (pos) updateLaptopPos(pos, data.conf);
+      }
     };
 
-    // Analyser for spectrum display only
     rxAnalyser = rxCtx.createAnalyser();
     rxAnalyser.fftSize = 2048;
     rxAnalyser.smoothingTimeConstant = 0;
 
-    // Signal path: mic → BPF → worklet (decode)
-    //              mic → analyser (display only)
     src.connect(rxBPF);
     rxBPF.connect(rxWorklet);
-    src.connect(rxAnalyser);   // unfiltered for spectrum display
+    src.connect(rxAnalyser);
 
     listening = true;
     setStatus('calibrating', 'Calibrating noise floor…');
@@ -832,6 +881,7 @@ function stopListen() {
   document.getElementById('confPct').textContent  = '0%';
   document.getElementById('noiseFloorDisplay').textContent = 'calibrating…';
   document.getElementById('snrDisplay').textContent = '—';
+  for (let i = 0; i < 4; i++) document.getElementById('rxCh' + i)?.classList.remove('on');
   if (currentMode === 'laptop') setStatus('idle');
 }
 
@@ -860,37 +910,56 @@ function updateLaptopPos(pos, conf) {
   });
 }
 
-// ── Spectrum display ───────────────────────────────────────────
+// ── Spectrum — marks the 4 channel tones + sync ───────────────
 function drawSpectrum() {
   const canvas = document.getElementById('specCanvas');
   const ctx2   = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
+  const CHAN_COLORS = ['#ff4081','#ffeb3b','#00e5ff','#76ff03'];
+
   const tick = () => {
     if (!listening || !rxAnalyser) return;
     const buf = new Uint8Array(rxAnalyser.frequencyBinCount);
     rxAnalyser.getByteFrequencyData(buf);
     ctx2.fillStyle = '#0d0d1a'; ctx2.fillRect(0, 0, W, H);
+
     const band = BANDS[currentBand];
     const sr   = rxCtx?.sampleRate ?? 44100;
     const fs   = rxAnalyser.fftSize;
-    const fMin = Math.max(1, band.tones[0] * 0.6);
-    const fMax = band.tones[8] * 1.4;
+    const allFreqs = [band.syncFreq, ...band.chTones];
+    const fMin = Math.max(1, Math.min(...allFreqs) * 0.85);
+    const fMax = Math.max(...allFreqs) * 1.15;
     const bLo  = Math.round(fMin * fs / sr);
     const bHi  = Math.min(buf.length - 1, Math.round(fMax * fs / sr));
     const span = Math.max(1, bHi - bLo);
+
+    // Spectrum bars
     for (let i = bLo; i <= bHi; i++) {
       const x = Math.round((i - bLo) / span * W);
       const barH = (buf[i] / 255) * H;
       ctx2.fillStyle = `hsl(${180 + (buf[i]/255)*60},100%,55%)`;
       ctx2.fillRect(x, H - barH, Math.max(1, W / span), barH);
     }
-    const rxIdx = POSITIONS.indexOf(lastRxPos);
-    band.tones.forEach((f, i) => {
-      const x = Math.round((Math.round(f * fs / sr) - bLo) / span * W);
-      ctx2.strokeStyle = i === rxIdx ? '#00e676' : '#ffffff22';
-      ctx2.lineWidth   = i === rxIdx ? 2 : 1;
+
+    // Sync marker (white)
+    const sx = Math.round((Math.round(band.syncFreq * fs / sr) - bLo) / span * W);
+    ctx2.strokeStyle = '#ffffff55'; ctx2.lineWidth = 1;
+    ctx2.beginPath(); ctx2.moveTo(sx, 0); ctx2.lineTo(sx, H); ctx2.stroke();
+
+    // Channel tone markers (coloured per channel)
+    band.chTones.forEach((f, i) => {
+      const x   = Math.round((Math.round(f * fs / sr) - bLo) / span * W);
+      const pip = document.getElementById('rxCh' + i);
+      const on  = pip?.classList.contains('on');
+      ctx2.strokeStyle = on ? CHAN_COLORS[i] : CHAN_COLORS[i] + '44';
+      ctx2.lineWidth   = on ? 2 : 1;
       ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, H); ctx2.stroke();
+      // Label
+      ctx2.fillStyle = on ? CHAN_COLORS[i] : CHAN_COLORS[i] + '66';
+      ctx2.font = '9px monospace';
+      ctx2.fillText('C' + (i+1), x + 2, 10);
     });
+
     specRaf = requestAnimationFrame(tick);
   };
   tick();
