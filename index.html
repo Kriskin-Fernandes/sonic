@@ -9,6 +9,7 @@
   :root {
     --bg: #0d0d1a; --panel: #161628; --accent: #00e5ff;
     --accent2: #7c4dff; --green: #00e676; --red: #ff1744;
+    --orange: #ff9100;
     --text: #e0e0ff; --muted: #555577; --radius: 16px;
   }
   body {
@@ -38,9 +39,27 @@
   .freq-btn.active { border-color: var(--accent); color: var(--accent); background: #00e5ff18; }
   .status-row { display: flex; align-items: center; gap: 10px; }
   .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); transition: background .3s; }
-  .dot.on  { background: var(--green); box-shadow: 0 0 8px var(--green); }
-  .dot.err { background: var(--red); }
+  .dot.on      { background: var(--green);  box-shadow: 0 0 8px var(--green); }
+  .dot.err     { background: var(--red);    box-shadow: 0 0 8px var(--red); }
+  .dot.calibrating { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
   #statusText { font-size: 0.8rem; color: var(--muted); }
+
+  /* noise filter controls */
+  .filter-row {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--muted);
+    background: var(--panel); border-radius: var(--radius);
+    padding: 10px 14px; max-width: 500px; width: 100%;
+  }
+  .filter-row label { color: var(--text); font-weight: 600; width: 100%; }
+  .filter-row input[type=range] { width: 110px; accent-color: var(--accent); }
+  .filter-row span { min-width: 32px; }
+  .recal-btn {
+    padding: 4px 12px; border: 1.5px solid var(--orange); border-radius: 50px;
+    background: transparent; color: var(--orange); font-size: 0.75rem;
+    cursor: pointer; transition: all .2s; margin-left: auto;
+  }
+  .recal-btn:hover { background: #ff910018; }
 
   /* PHONE */
   #phoneMode { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
@@ -135,6 +154,11 @@
   .conf-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--muted); }
   .conf-bar { width: 150px; height: 8px; background: #222; border-radius: 4px; overflow: hidden; }
   .conf-fill { height: 100%; background: var(--green); width: 0%; transition: width .04s; border-radius: 4px; }
+  .noise-row {
+    font-size: 0.75rem; color: var(--muted);
+    display: flex; gap: 8px; align-items: center;
+  }
+  .noise-row span { color: var(--orange); font-weight: 600; }
   .hidden { display: none !important; }
   .info-box {
     background: var(--panel); border-radius: var(--radius); padding: 12px 16px;
@@ -154,8 +178,9 @@
 </div>
 
 <div class="freq-bar">
-  <button class="freq-btn active" id="fLow"  onclick="setFreqBand('low')">🔊 Low (400–800 Hz)</button>
-  <button class="freq-btn"        id="fBass" onclick="setFreqBand('bass')">🔉 Bass (100–200 Hz)</button>
+  <button class="freq-btn active" id="fLow"       onclick="setFreqBand('low')">🔊 Low (400–800 Hz)</button>
+  <button class="freq-btn"        id="fBass"      onclick="setFreqBand('bass')">🔉 Bass (100–200 Hz)</button>
+  <button class="freq-btn"        id="fUltrasonic" onclick="setFreqBand('ultrasonic')">🔇 Ultrasonic (18 kHz)</button>
 </div>
 
 <div class="status-row">
@@ -163,40 +188,53 @@
   <span id="statusText">Idle</span>
 </div>
 
-<!-- PHONE MODE -->
+<!-- ══════════ PHONE MODE ══════════ -->
 <div id="phoneMode">
   <div class="pos-label" id="phonePos">CENTER</div>
   <div class="joystick-wrap" id="joystickWrap">
     <div class="zone-grid" id="phoneZoneGrid"></div>
     <div class="joystick-thumb" id="joystickThumb"></div>
   </div>
-
   <div class="vol-row">
     🔈 Volume:
     <input type="range" id="txVolume" min="0.1" max="1.0" step="0.05" value="0.8" />
     <span id="txVolLabel">80%</span>
   </div>
-
-  <!-- Waveform selector — sine is cleanest, triangle is gentler on speakers -->
   <div class="wave-row">
     Waveform:
     <button class="wave-btn active" id="wSine"     onclick="setWave('sine')">Sine</button>
     <button class="wave-btn"        id="wTriangle" onclick="setWave('triangle')">Triangle</button>
   </div>
-
   <button class="tx-btn" id="txBtn" onclick="toggleTransmit()">▶ Start Transmitting</button>
-
   <div class="info-box">
     <b>Phone tips:</b><br>
-    • <b>Low (400–800 Hz)</b> is the most reliable and speaker-friendly band.<br>
-    • <b>Bass (100–200 Hz)</b> may crackle on some phones — reduce volume if so.<br>
-    • <b>Triangle</b> waveform is gentler on small speakers than Sine.<br>
-    • Point the phone speaker toward the laptop mic.
+    • <b>Low (400–800 Hz)</b> is the most reliable band.<br>
+    • <b>Ultrasonic (18 kHz)</b> is silent — best in noisy rooms.<br>
+    • <b>Bass (100–200 Hz)</b> may crackle — reduce volume if so.<br>
+    • Triangle waveform is gentler on small speakers.
   </div>
 </div>
 
-<!-- LAPTOP MODE -->
+<!-- ══════════ LAPTOP MODE ══════════ -->
 <div id="laptopMode" class="hidden">
+
+  <!-- Noise filter controls -->
+  <div class="filter-row" id="filterControls">
+    <label>🎛 Noise Filter Settings</label>
+    SNR gate:
+    <input type="range" id="snrSlider" min="1" max="20" step="0.5" value="6" />
+    <span id="snrVal">6 dB</span>
+     |  Streak:
+    <input type="range" id="streakSlider" min="1" max="8" step="1" value="3" />
+    <span id="streakVal">3</span>
+    <button class="recal-btn" onclick="startCalibration()">⟳ Re-calibrate</button>
+  </div>
+
+  <div class="noise-row">
+    Noise floor: <span id="noiseFloorDisplay">calibrating…</span>
+     |  SNR margin: <span id="snrDisplay">—</span>
+  </div>
+
   <div class="rx-label" id="laptopPos">---</div>
   <div class="laptop-joystick" id="laptopJoystick">
     <div class="laptop-zone-grid" id="laptopZoneGrid"></div>
@@ -214,24 +252,26 @@
   <button class="rx-btn" id="rxBtn" onclick="toggleListen()">🎤 Start Listening</button>
   <div class="info-box">
     <b>Laptop tips:</b><br>
-    • Match the band chosen on the phone.<br>
-    • Click <b>Start Listening</b> and allow mic access.<br>
-    • Reduce background noise for best results.<br>
-    • The spectrum shows which tones are being detected.
+    • The system auto-calibrates the noise floor on startup (1 sec).<br>
+    • Increase <b>SNR gate</b> if you get false positives in noisy rooms.<br>
+    • Increase <b>Streak</b> to require more consecutive matches before accepting.<br>
+    • Hit <b>Re-calibrate</b> if background noise changes.<br>
+    • <b>Ultrasonic</b> band avoids most room noise entirely.
   </div>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-//  SONIC JOYSTICK — Anti-crackle edition
-//  Fixes applied (frequencies unchanged):
-//    1. DynamicsCompressorNode — prevents digital clipping
-//    2. Per-band gain scaling  — bass band runs at lower level
-//    3. High-pass filter       — removes sub-speaker-range energy
-//    4. DC-offset biquad       — eliminates asymmetric distortion
-//    5. Triangle wave option   — softer harmonics on small speakers
-//    6. Longer tone ramp       — 4ms→12ms for bass, avoids impulse
-//    7. Gain per oscillator    — two oscs never sum above 0.7
+//  SONIC JOYSTICK — Noise-filtered edition
+//
+//  RX noise filtering stack (all in AudioWorklet thread):
+//    1. Adaptive noise floor calibration (1 sec ambient measurement)
+//    2. SNR gate — signal must exceed noise floor by N dB
+//    3. Hysteresis — new pos must beat current pos confidence by margin
+//    4. Streak counter — N consecutive matching blocks required
+//    5. Band-pass pre-filter on RX chain (Web Audio, before worklet)
+//
+//  New band: Ultrasonic 18 kHz (avoids most ambient noise)
 // ═══════════════════════════════════════════════════════════════
 
 const POSITIONS = ['NW','N','NE','W','CENTER','E','SW','S','SE'];
@@ -246,53 +286,95 @@ const GRID_MAP = [
   ['SW','S','SE']
 ];
 
-// ── Bands — frequencies UNCHANGED from previous version ────────
+// ── Bands ──────────────────────────────────────────────────────
 const BANDS = {
   low: {
     label:      'Low (400–800 Hz)',
     tones:      [400, 444, 489, 533, 578, 622, 667, 711, 756],
     syncFreq:   356,
     bw:         18,
-    blockSize:  256,       // ~5.8 ms — fastest possible decode
+    blockSize:  256,
     noiseFloor: 0.0008,
-    // Anti-crackle: modest gain for this band, HPF cutoff well below tones
-    oscGain:    0.38,      // each osc — two together = 0.76 pre-compressor
-    hpfCutoff:  200,       // roll off below 200 Hz (well below 400 Hz tones)
-    rampTime:   0.004      // 4 ms ramp — fine at these frequencies
+    oscGain:    0.38,
+    hpfCutoff:  200,
+    rampTime:   0.004,
+    // Band-pass filter for RX chain
+    bpfFreq:    578,    // centre of tone range
+    bpfQ:       3.0     // moderate Q — covers full 400–800 Hz range
   },
   bass: {
     label:      'Bass (100–200 Hz)',
     tones:      [100, 112, 125, 137, 150, 162, 175, 187, 200],
     syncFreq:   88,
     bw:         5,
-    blockSize:  1024,      // ~23 ms — needed for 5 Hz resolution
+    blockSize:  1024,
     noiseFloor: 0.0004,
-    // Anti-crackle: lower gain + longer ramp + HPF to cut sub-bass rumble
-    oscGain:    0.28,      // reduced — bass freqs hit speakers harder
-    hpfCutoff:  60,        // roll off below 60 Hz (removes DC/sub rumble)
-    rampTime:   0.012      // 12 ms ramp — slower = less impulse energy into speaker
+    oscGain:    0.28,
+    hpfCutoff:  60,
+    rampTime:   0.012,
+    bpfFreq:    150,
+    bpfQ:       2.0
+  },
+  ultrasonic: {
+    label:      'Ultrasonic (18 kHz)',
+    // 9 tones spaced 200 Hz apart: 17600–19200 Hz
+    tones:      [17600, 17800, 18000, 18200, 18400, 18600, 18800, 19000, 19200],
+    syncFreq:   17400,
+    bw:         80,
+    blockSize:  256,    // ~5.8 ms — fast decode, high freqs resolve easily
+    noiseFloor: 0.0002, // ultrasonic range is very quiet in most rooms
+    oscGain:    0.45,   // can be louder — inaudible to humans
+    hpfCutoff:  15000,  // steep HPF — kills all audible-range noise
+    rampTime:   0.004,
+    bpfFreq:    18400,
+    bpfQ:       8.0     // tight Q — ultrasonic band is narrow, reject everything else
   }
 };
 
-// ── AudioWorklet (Goertzel, audio render thread) ───────────────
+// ── AudioWorklet — Goertzel + full noise filter stack ─────────
 const WORKLET_SRC = `
 class GoertzelProcessor extends AudioWorkletProcessor {
   constructor(opt) {
     super();
-    const p        = opt.processorOptions;
-    this.sr        = p.sampleRate;
-    this.freqs     = p.freqs;
-    this.syncFreq  = p.syncFreq;
-    this.blockSize = p.blockSize;
-    this.floor     = p.noiseFloor;
-    this.buf       = [];
-    this.coeffs    = this.freqs.map(f => this._coeff(f));
-    this.syncCoeff = this._coeff(this.syncFreq);
+    const p          = opt.processorOptions;
+    this.sr          = p.sampleRate;
+    this.freqs       = p.freqs;
+    this.syncFreq    = p.syncFreq;
+    this.blockSize   = p.blockSize;
+    this.floor       = p.noiseFloor;
+
+    // Noise filter params (updated live via port messages)
+    this.snrGainDb   = p.snrGainDb   ?? 6;    // dB above noise floor required
+    this.streakNeeded= p.streakNeeded ?? 3;    // consecutive blocks needed
+    this.hystMargin  = p.hystMargin   ?? 0.15; // confidence margin for hysteresis
+
+    // Internal state
+    this.buf           = [];
+    this.calibrating   = true;
+    this.calibBuf      = [];
+    this.calibSamples  = p.calibSamples ?? 44100; // 1 second
+    this.noisePower    = 0;   // measured ambient power per tone
+    this.currentPos    = -1;  // currently accepted position
+    this.currentConf   = 0;
+    this.streakPos     = -1;  // candidate being streaked
+    this.streakCount   = 0;
+
+    // Pre-compute coefficients
+    this.coeffs     = this.freqs.map(f => this._coeff(f));
+    this.syncCoeff  = this._coeff(this.syncFreq);
+
+    // Listen for live param updates from main thread
+    this.port.onmessage = (e) => {
+      if (e.data.snrGainDb   !== undefined) this.snrGainDb    = e.data.snrGainDb;
+      if (e.data.streakNeeded !== undefined) this.streakNeeded = e.data.streakNeeded;
+      if (e.data.recalibrate)               { this.calibrating = true; this.calibBuf = []; }
+    };
   }
+
   _coeff(freq) {
-    const w = 2 * Math.PI * freq / this.sr;
-    return 2 * Math.cos(w);
+    return 2 * Math.cos(2 * Math.PI * freq / this.sr);
   }
+
   _goertzel(samples, coeff) {
     let s1 = 0, s2 = 0;
     for (let i = 0; i < samples.length; i++) {
@@ -301,24 +383,107 @@ class GoertzelProcessor extends AudioWorkletProcessor {
     }
     return s1*s1 + s2*s2 - s1*s2*coeff;
   }
+
+  // Measure average power across all tone bins — this IS the noise floor
+  _measureNoisePower(block) {
+    let total = 0;
+    for (let i = 0; i < this.coeffs.length; i++) {
+      total += this._goertzel(block, this.coeffs[i]);
+    }
+    return total / this.coeffs.length;
+  }
+
   process(inputs) {
     const ch = inputs[0]?.[0];
     if (!ch) return true;
     for (let i = 0; i < ch.length; i++) this.buf.push(ch[i]);
+
     while (this.buf.length >= this.blockSize) {
-      const block    = this.buf.splice(0, this.blockSize);
-      const syncPow  = this._goertzel(block, this.syncCoeff);
-      if (syncPow < this.floor) {
-        this.port.postMessage({ pos: null, conf: 0 });
+      const block = this.buf.splice(0, this.blockSize);
+
+      // ── Phase 1: Calibration ─────────────────────────────────
+      if (this.calibrating) {
+        for (let s of block) this.calibBuf.push(s);
+        this.port.postMessage({ calibrating: true, progress: this.calibBuf.length / this.calibSamples });
+
+        if (this.calibBuf.length >= this.calibSamples) {
+          // Compute noise power from calibration recording
+          // Split into blocks and average
+          let totalPow = 0, count = 0;
+          for (let i = 0; i + this.blockSize <= this.calibBuf.length; i += this.blockSize) {
+            const b = this.calibBuf.slice(i, i + this.blockSize);
+            totalPow += this._measureNoisePower(b);
+            count++;
+          }
+          this.noisePower  = count > 0 ? totalPow / count : this.floor;
+          this.calibrating = false;
+          this.calibBuf    = [];
+          this.port.postMessage({ calibrated: true, noisePower: this.noisePower });
+        }
         continue;
       }
-      let bestIdx = 0, bestPow = -1;
+
+      // ── Phase 2: Sync gate ───────────────────────────────────
+      const syncPow = this._goertzel(block, this.syncCoeff);
+
+      // SNR gate: sync must be snrGainDb above noise floor
+      const snrLinear = Math.pow(10, this.snrGainDb / 10);
+      if (syncPow < this.noisePower * snrLinear) {
+        // No valid signal — reset streak, report silence
+        this.streakPos   = -1;
+        this.streakCount = 0;
+        this.port.postMessage({ pos: null, conf: 0, snr: syncPow / (this.noisePower + 1e-12) });
+        continue;
+      }
+
+      // ── Phase 3: Find best data tone ─────────────────────────
+      let bestIdx = 0, bestPow = -1, secondPow = -1;
+      const powers = [];
       for (let i = 0; i < this.freqs.length; i++) {
         const p = this._goertzel(block, this.coeffs[i]);
-        if (p > bestPow) { bestPow = p; bestIdx = i; }
+        powers.push(p);
+        if (p > bestPow) { secondPow = bestPow; bestPow = p; bestIdx = i; }
+        else if (p > secondPow) { secondPow = p; }
       }
-      const conf = Math.min(100, Math.round((bestPow / (syncPow + 1e-9)) * 80));
-      if (conf >= 15) this.port.postMessage({ pos: bestIdx, conf });
+
+      // Confidence: how much louder is the winner vs runner-up
+      // This is more robust than ratio-to-sync for noisy environments
+      const separation = secondPow > 0 ? bestPow / secondPow : 10;
+      const conf = Math.min(100, Math.round(Math.log2(separation + 1) * 40));
+
+      // ── Phase 4: Hysteresis ───────────────────────────────────
+      // Only switch position if new candidate is meaningfully better
+      // than the currently held position
+      if (bestIdx === this.currentPos) {
+        // Reinforcing current position — just update confidence
+        this.currentConf = conf;
+        this.streakPos   = bestIdx;
+        this.streakCount = this.streakNeeded; // already confirmed
+        this.port.postMessage({ pos: bestIdx, conf, snr: syncPow / (this.noisePower + 1e-12) });
+        continue;
+      }
+
+      // New candidate — check hysteresis margin
+      const hystThreshold = this.currentConf * (1 - this.hystMargin);
+      if (conf < hystThreshold && this.currentPos !== -1) {
+        // Not confident enough to switch — ignore
+        continue;
+      }
+
+      // ── Phase 5: Streak counter ───────────────────────────────
+      if (bestIdx === this.streakPos) {
+        this.streakCount++;
+      } else {
+        this.streakPos   = bestIdx;
+        this.streakCount = 1;
+      }
+
+      if (this.streakCount >= this.streakNeeded) {
+        // Accepted — commit position change
+        this.currentPos  = bestIdx;
+        this.currentConf = conf;
+        this.port.postMessage({ pos: bestIdx, conf, snr: syncPow / (this.noisePower + 1e-12) });
+      }
     }
     return true;
   }
@@ -336,6 +501,10 @@ let joystickPos  = 'CENTER';
 let lastRxPos    = null;
 let txVolume     = 0.8;
 
+// Noise filter params (mirrored to worklet via messages)
+let snrGainDb    = 6;
+let streakNeeded = 3;
+
 let txCtx        = null;
 let txOscs       = [];
 let txMasterGain = null;
@@ -347,6 +516,7 @@ let rxCtx        = null;
 let rxWorklet    = null;
 let rxAnalyser   = null;
 let rxStream     = null;
+let rxBPF        = null;
 let specRaf      = null;
 
 // ── Grid builders ──────────────────────────────────────────────
@@ -355,8 +525,7 @@ function buildGrid(containerId, prefix, cls) {
   el.innerHTML = '';
   GRID_MAP.forEach(row => row.forEach(pos => {
     const c = document.createElement('div');
-    c.className = cls;
-    c.id = prefix + pos;
+    c.className = cls; c.id = prefix + pos;
     c.textContent = pos === 'CENTER' ? '●' : pos;
     el.appendChild(c);
   }));
@@ -376,7 +545,8 @@ function setMode(mode) {
 function setFreqBand(band) {
   currentBand = band;
   document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(band === 'low' ? 'fLow' : 'fBass').classList.add('active');
+  const ids = { low:'fLow', bass:'fBass', ultrasonic:'fUltrasonic' };
+  document.getElementById(ids[band]).classList.add('active');
   if (transmitting) { stopTransmit(); startTransmit(); }
   if (listening)    { stopListen();   startListen();   }
 }
@@ -385,7 +555,6 @@ function setWave(wave) {
   currentWave = wave;
   document.getElementById('wSine')    .classList.toggle('active', wave === 'sine');
   document.getElementById('wTriangle').classList.toggle('active', wave === 'triangle');
-  // Hot-swap waveform if already transmitting
   if (transmitting) playTones(joystickPos);
 }
 
@@ -393,9 +562,30 @@ function setStatus(state, msg) {
   const dot = document.getElementById('statusDot');
   const txt = document.getElementById('statusText');
   dot.className = 'dot';
-  if      (state === 'on')  { dot.classList.add('on');  txt.textContent = msg || 'Active'; }
-  else if (state === 'err') { dot.classList.add('err'); txt.textContent = msg || 'Error';  }
-  else                      {                            txt.textContent = msg || 'Idle';   }
+  if      (state === 'on')          { dot.classList.add('on');          txt.textContent = msg || 'Active'; }
+  else if (state === 'err')         { dot.classList.add('err');         txt.textContent = msg || 'Error'; }
+  else if (state === 'calibrating') { dot.classList.add('calibrating'); txt.textContent = msg || 'Calibrating…'; }
+  else                              {                                    txt.textContent = msg || 'Idle'; }
+}
+
+// ── Noise filter sliders ───────────────────────────────────────
+document.getElementById('snrSlider').addEventListener('input', function () {
+  snrGainDb = parseFloat(this.value);
+  document.getElementById('snrVal').textContent = snrGainDb + ' dB';
+  if (rxWorklet) rxWorklet.port.postMessage({ snrGainDb });
+});
+
+document.getElementById('streakSlider').addEventListener('input', function () {
+  streakNeeded = parseInt(this.value);
+  document.getElementById('streakVal').textContent = streakNeeded;
+  if (rxWorklet) rxWorklet.port.postMessage({ streakNeeded });
+});
+
+function startCalibration() {
+  if (rxWorklet) {
+    rxWorklet.port.postMessage({ recalibrate: true });
+    setStatus('calibrating', 'Re-calibrating noise floor…');
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -410,8 +600,7 @@ function initJoystick() {
     const rect  = wrap.getBoundingClientRect();
     const cx    = rect.left + rect.width  / 2;
     const cy    = rect.top  + rect.height / 2;
-    const dx    = clientX - cx;
-    const dy    = clientY - cy;
+    const dx    = clientX - cx, dy = clientY - cy;
     const r     = rect.width / 2;
     const cDist = Math.min(Math.hypot(dx, dy), r * 0.85);
     const ang   = Math.atan2(dy, dx);
@@ -432,8 +621,7 @@ function initJoystick() {
   };
   const onEnd = e => {
     e.preventDefault(); active = false; thumb.classList.remove('pressed');
-    thumb.style.left = '50%'; thumb.style.top = '50%';
-    applyZone('CENTER');
+    thumb.style.left = '50%'; thumb.style.top = '50%'; applyZone('CENTER');
   };
 
   wrap.addEventListener('touchstart', onStart, {passive:false});
@@ -455,48 +643,24 @@ function applyZone(pos) {
   if (transmitting) playTones(pos);
 }
 
-// ── TX audio chain ─────────────────────────────────────────────
-//
-//  OscA ─┐
-//        ├─► [per-osc gain] ─► HPF ─► DC-block ─► Compressor ─► MasterGain ─► out
-//  OscB ─┘
-//
-//  HPF:        removes energy below speaker's usable range
-//  DC-block:   1Hz HPF — kills any DC offset that causes asymmetric clipping
-//  Compressor: soft-knee limiter — catches any peaks before the DAC
-//  MasterGain: user volume control (applied last, after limiting)
-//
 function startTransmit() {
   if (txCtx) txCtx.close();
   txCtx = new AudioContext({ latencyHint: 'interactive', sampleRate: 44100 });
-
   const band = BANDS[currentBand];
 
-  // ── High-pass filter (removes sub-speaker-range energy) ──────
   txHPF = txCtx.createBiquadFilter();
-  txHPF.type            = 'highpass';
-  txHPF.frequency.value = band.hpfCutoff;
-  txHPF.Q.value         = 0.5;   // gentle slope, no resonant peak
+  txHPF.type = 'highpass'; txHPF.frequency.value = band.hpfCutoff; txHPF.Q.value = 0.5;
 
-  // ── DC-block filter (1 Hz HPF) ───────────────────────────────
   txDCBlock = txCtx.createBiquadFilter();
-  txDCBlock.type            = 'highpass';
-  txDCBlock.frequency.value = 1;
-  txDCBlock.Q.value         = 0.1;
+  txDCBlock.type = 'highpass'; txDCBlock.frequency.value = 1; txDCBlock.Q.value = 0.1;
 
-  // ── Dynamics compressor (soft limiter) ───────────────────────
   txCompressor = txCtx.createDynamicsCompressor();
-  txCompressor.threshold.value = -6;   // start compressing at -6 dBFS
-  txCompressor.knee.value      = 6;    // soft knee — gradual, not harsh
-  txCompressor.ratio.value     = 8;    // 8:1 — strong limiting above threshold
-  txCompressor.attack.value    = 0.001;// 1 ms attack — catches transients fast
-  txCompressor.release.value   = 0.05; // 50 ms release
+  txCompressor.threshold.value = -6; txCompressor.knee.value = 6;
+  txCompressor.ratio.value = 8; txCompressor.attack.value = 0.001; txCompressor.release.value = 0.05;
 
-  // ── Master gain (user volume, post-compressor) ────────────────
   txMasterGain = txCtx.createGain();
   txMasterGain.gain.value = txVolume;
 
-  // Chain: HPF → DC-block → Compressor → MasterGain → out
   txHPF.connect(txDCBlock);
   txDCBlock.connect(txCompressor);
   txCompressor.connect(txMasterGain);
@@ -510,10 +674,9 @@ function startTransmit() {
 }
 
 function stopTransmit() {
-  transmitting = false;
-  killOscs();
+  transmitting = false; killOscs();
   if (txCtx) { txCtx.close(); txCtx = null; }
-  txMasterGain = null; txCompressor = null; txHPF = null; txDCBlock = null;
+  txMasterGain = txCompressor = txHPF = txDCBlock = null;
   document.getElementById('txBtn').textContent = '▶ Start Transmitting';
   document.getElementById('txBtn').classList.remove('active');
   if (currentMode === 'phone') setStatus('idle');
@@ -529,35 +692,18 @@ function killOscs() {
 function playTones(pos) {
   if (!transmitting || !txCtx) return;
   killOscs();
-
   const band = BANDS[currentBand];
   const idx  = POSITIONS.indexOf(pos);
   if (idx < 0) return;
-
-  const now  = txCtx.currentTime;
-  const ramp = band.rampTime;
-
-  // Two oscillators: sync beacon + data tone
-  // Each gets its own gain node so their sum never exceeds 2×oscGain
+  const now = txCtx.currentTime;
   [band.syncFreq, band.tones[idx]].forEach(freq => {
     const osc = txCtx.createOscillator();
     const g   = txCtx.createGain();
-
-    // Triangle wave has softer harmonics than sine — less harsh on speakers
-    // Sine is spectrally purer — better for Goertzel detection
-    // User chooses via the waveform selector
-    osc.type            = currentWave;
-    osc.frequency.value = freq;
-
-    // Smooth ramp-up — avoids the impulse "click" that stresses speaker cones
+    osc.type = currentWave; osc.frequency.value = freq;
     g.gain.setValueAtTime(0, now);
-    g.gain.linearRampToValueAtTime(band.oscGain, now + ramp);
-
-    // Connect into the processing chain (HPF is the entry point)
-    osc.connect(g);
-    g.connect(txHPF);
-    osc.start(now);
-    txOscs.push(osc);
+    g.gain.linearRampToValueAtTime(band.oscGain, now + band.rampTime);
+    osc.connect(g); g.connect(txHPF);
+    osc.start(now); txOscs.push(osc);
   });
 }
 
@@ -568,7 +714,7 @@ document.getElementById('txVolume').addEventListener('input', function () {
 });
 
 // ═══════════════════════════════════════════════════════════════
-//  LAPTOP RX — AudioWorklet + Goertzel (unchanged from prev)
+//  LAPTOP RX
 // ═══════════════════════════════════════════════════════════════
 async function startListen() {
   try {
@@ -582,8 +728,8 @@ async function startListen() {
     });
 
     rxCtx = new AudioContext({ latencyHint: 'interactive', sampleRate: 44100 });
-
     const band = BANDS[currentBand];
+
     const blob = new Blob([WORKLET_SRC], { type: 'application/javascript' });
     const url  = URL.createObjectURL(blob);
     await rxCtx.audioWorklet.addModule(url);
@@ -591,37 +737,78 @@ async function startListen() {
 
     const src = rxCtx.createMediaStreamSource(rxStream);
 
+    // ── Band-pass pre-filter ─────────────────────────────────
+    // Narrows the frequency range before Goertzel sees it
+    // Rejects noise outside the target band entirely
+    rxBPF = rxCtx.createBiquadFilter();
+    rxBPF.type            = 'bandpass';
+    rxBPF.frequency.value = band.bpfFreq;
+    rxBPF.Q.value         = band.bpfQ;
+
     rxWorklet = new AudioWorkletNode(rxCtx, 'goertzel-processor', {
       numberOfOutputs: 0,
       processorOptions: {
-        sampleRate:  rxCtx.sampleRate,
-        freqs:       band.tones,
-        syncFreq:    band.syncFreq,
-        blockSize:   band.blockSize,
-        noiseFloor:  band.noiseFloor
+        sampleRate:    rxCtx.sampleRate,
+        freqs:         band.tones,
+        syncFreq:      band.syncFreq,
+        blockSize:     band.blockSize,
+        noiseFloor:    band.noiseFloor,
+        snrGainDb:     snrGainDb,
+        streakNeeded:  streakNeeded,
+        hystMargin:    0.15,
+        calibSamples:  rxCtx.sampleRate  // 1 second calibration
       }
     });
 
-    rxWorklet.port.onmessage = ({ data: { pos, conf } }) => {
-      if (pos === null) {
+    // ── Worklet message handler ──────────────────────────────
+    rxWorklet.port.onmessage = ({ data }) => {
+
+      // Calibration progress
+      if (data.calibrating) {
+        const pct = Math.round(data.progress * 100);
+        setStatus('calibrating', `Calibrating… ${pct}%`);
+        document.getElementById('noiseFloorDisplay').textContent = `measuring… ${pct}%`;
+        return;
+      }
+
+      // Calibration complete
+      if (data.calibrated) {
+        setStatus('on', 'RX · ' + band.label);
+        const np = data.noisePower.toExponential(2);
+        document.getElementById('noiseFloorDisplay').textContent = np;
+        return;
+      }
+
+      // SNR display
+      if (data.snr !== undefined) {
+        const snrDb = Math.round(10 * Math.log10(data.snr + 1e-12));
+        document.getElementById('snrDisplay').textContent = snrDb + ' dB';
+      }
+
+      // Position update
+      if (data.pos === null) {
         document.getElementById('confFill').style.width = '0%';
         document.getElementById('confPct').textContent  = '0%';
         return;
       }
-      updateLaptopPos(POSITIONS[pos], conf);
+      updateLaptopPos(POSITIONS[data.pos], data.conf);
     };
 
+    // Analyser for spectrum display only
     rxAnalyser = rxCtx.createAnalyser();
     rxAnalyser.fftSize = 2048;
     rxAnalyser.smoothingTimeConstant = 0;
 
-    src.connect(rxWorklet);
-    src.connect(rxAnalyser);
+    // Signal path: mic → BPF → worklet (decode)
+    //              mic → analyser (display only)
+    src.connect(rxBPF);
+    rxBPF.connect(rxWorklet);
+    src.connect(rxAnalyser);   // unfiltered for spectrum display
 
     listening = true;
+    setStatus('calibrating', 'Calibrating noise floor…');
     document.getElementById('rxBtn').textContent = '⏹ Stop Listening';
     document.getElementById('rxBtn').classList.add('active');
-    setStatus('on', 'RX · ' + band.label);
     drawSpectrum();
 
   } catch (err) {
@@ -634,6 +821,7 @@ function stopListen() {
   listening = false;
   if (specRaf)   { cancelAnimationFrame(specRaf); specRaf = null; }
   if (rxWorklet) { rxWorklet.disconnect(); rxWorklet = null; }
+  if (rxBPF)     { rxBPF.disconnect(); rxBPF = null; }
   if (rxStream)  { rxStream.getTracks().forEach(t => t.stop()); rxStream = null; }
   if (rxCtx)     { rxCtx.close(); rxCtx = null; }
   rxAnalyser = null;
@@ -642,6 +830,8 @@ function stopListen() {
   document.getElementById('laptopThumb').classList.remove('active');
   document.getElementById('confFill').style.width = '0%';
   document.getElementById('confPct').textContent  = '0%';
+  document.getElementById('noiseFloorDisplay').textContent = 'calibrating…';
+  document.getElementById('snrDisplay').textContent = '—';
   if (currentMode === 'laptop') setStatus('idle');
 }
 
@@ -653,7 +843,6 @@ function updateLaptopPos(pos, conf) {
   if (pos === lastRxPos) return;
   lastRxPos = pos;
   document.getElementById('laptopPos').textContent = POS_LABELS[pos];
-
   const jEl   = document.getElementById('laptopJoystick');
   const thumb = document.getElementById('laptopThumb');
   const r     = jEl.offsetWidth / 2;
@@ -676,14 +865,11 @@ function drawSpectrum() {
   const canvas = document.getElementById('specCanvas');
   const ctx2   = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
-
   const tick = () => {
     if (!listening || !rxAnalyser) return;
     const buf = new Uint8Array(rxAnalyser.frequencyBinCount);
     rxAnalyser.getByteFrequencyData(buf);
-    ctx2.fillStyle = '#0d0d1a';
-    ctx2.fillRect(0, 0, W, H);
-
+    ctx2.fillStyle = '#0d0d1a'; ctx2.fillRect(0, 0, W, H);
     const band = BANDS[currentBand];
     const sr   = rxCtx?.sampleRate ?? 44100;
     const fs   = rxAnalyser.fftSize;
@@ -692,14 +878,12 @@ function drawSpectrum() {
     const bLo  = Math.round(fMin * fs / sr);
     const bHi  = Math.min(buf.length - 1, Math.round(fMax * fs / sr));
     const span = Math.max(1, bHi - bLo);
-
     for (let i = bLo; i <= bHi; i++) {
-      const x    = Math.round((i - bLo) / span * W);
+      const x = Math.round((i - bLo) / span * W);
       const barH = (buf[i] / 255) * H;
       ctx2.fillStyle = `hsl(${180 + (buf[i]/255)*60},100%,55%)`;
       ctx2.fillRect(x, H - barH, Math.max(1, W / span), barH);
     }
-
     const rxIdx = POSITIONS.indexOf(lastRxPos);
     band.tones.forEach((f, i) => {
       const x = Math.round((Math.round(f * fs / sr) - bLo) / span * W);
@@ -707,7 +891,6 @@ function drawSpectrum() {
       ctx2.lineWidth   = i === rxIdx ? 2 : 1;
       ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, H); ctx2.stroke();
     });
-
     specRaf = requestAnimationFrame(tick);
   };
   tick();
